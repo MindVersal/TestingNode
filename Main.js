@@ -9,4 +9,5 @@ console.log("After insert.");
 console.log();
 console.log("Stop testing.");
 console.log();
+console.log();
 console.log("The End.");
