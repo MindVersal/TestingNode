@@ -3,4 +3,4 @@
  */
 console.log("Chapter 08.");
 console.log();
-console.log("ThE END.");
+console.log("THE END.");
