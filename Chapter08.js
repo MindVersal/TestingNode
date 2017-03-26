@@ -14,7 +14,6 @@ let plan = ["############################",
             "# o  #         o       ### #",
             "#    #                     #",
             "############################"];
-console.log(plan);
 function Vector(x, y) {
     this.x = x;
     this.y = y;
@@ -99,7 +98,67 @@ World.prototype.toString = function () {
 function Wall() {
     
 }
+World.prototype.turn = function () {
+    let acted = [];
+    this.grid.forEach(function (critter, vector) {
+        if (critter.act && acted.indexOf(critter) === -1) {
+            acted.push(critter);
+            this.letAct(critter, vector);
+        }
+    }, this);
+};
+World.prototype.letAct = function (critter, vector) {
+    let action = critter.act(new View(this, vector));
+    if (action && action.type === "move"){
+        let dest = this.checkDestination(action, vector);
+        if (dest && this.grid.get(dest) === null) {
+            this.grid.set(vector, null);
+            this.grid.set(dest, critter);
+        }
+    }
+};
+World.prototype.checkDestination = function (action, vector) {
+    if (directions.hasOwnProperty(action.direction)){
+        let dest = vector.plus(directions[action.direction]);
+        if (this.grid.isInside(dest)){
+            return dest;
+        }
+    }
+};
+function View(world, vector) {
+    this.world = world;
+    this.vector = vector;
+}
+View.prototype.look = function (dir) {
+    let target = this.vector.plus(directions[dir]);
+    if (this.world.grid.isInside(target)){
+        return charFromElement(this.world.grig.get(target));
+    } else {
+        return "#";
+    }
+};
+View.prototype.findAll = function (ch) {
+    let found = [];
+    for (let dir in directions){
+        if (this.look(dir) === ch){
+            found.push(dir);
+        }
+    }
+    return found;
+};
+View.prototype.found = function (ch) {
+    let found = this.findAll(ch);
+    if (found.legend === 0) {
+        return null;
+    } else {
+        return randomElement(found);
+    }
+};
 let world = new World(plan, {"#" : Wall, "o" : BouncingCritter});
 console.log("\nWorld to string: \n" + world.toString());
+for (let i = 0; i < 5; i++){
+    world.turn();
+    console.log("\nIterate " + i + ":\n" + world.toString());
+}
 console.log();
 console.log("THE END.");
