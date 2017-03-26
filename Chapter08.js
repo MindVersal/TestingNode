@@ -36,6 +36,16 @@ Grid.prototype.get = function (vector) {
 Grid.prototype.set = function (vector, value) {
     this.space[vector.x + this.width * vector.y] = value;
 };
+Grid.prototype.forEach = function (f, context) {
+    for (let y = 0; y < this.height; y++){
+        for (let x = 0; x < this.width; x++){
+            let value = this.space[x + y * this.width];
+            if (value != null) {
+                f.call(context, value, new Vector(x, y));
+            }
+        }
+    }
+};
 let directions = {
     "n"  : new Vector( 0, -1),
     "ne" : new Vector( 1, -1),
@@ -54,7 +64,7 @@ function BouncingCritter() {
 }
 BouncingCritter.prototype.act = function (view) {
     if (view.look(this.direction) !== " "){
-        this.direction = view.find(" ") || "s";
+        this.direction = view.found(" ") || "s";
     }
     return {type: "move", direction: this.direction};
 };
@@ -132,7 +142,7 @@ function View(world, vector) {
 View.prototype.look = function (dir) {
     let target = this.vector.plus(directions[dir]);
     if (this.world.grid.isInside(target)){
-        return charFromElement(this.world.grig.get(target));
+        return charFromElement(this.world.grid.get(target));
     } else {
         return "#";
     }
