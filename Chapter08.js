@@ -156,7 +156,7 @@ View.prototype.findAll = function (ch) {
     }
     return found;
 };
-View.prototype.found = function (ch) {
+View.prototype.find = function (ch) {
     let found = this.findAll(ch);
     if (found.legend === 0) {
         return null;
@@ -164,11 +164,168 @@ View.prototype.found = function (ch) {
         return randomElement(found);
     }
 };
-let world = new World(plan, {"#" : Wall, "o" : BouncingCritter});
-console.log("\nWorld to string: \n" + world.toString());
-for (let i = 0; i < 5; i++){
-    world.turn();
-    console.log("\nIterate " + i + ":\n" + world.toString());
+let directionNames = Object.keys(directions);
+function dirPlus(dir, n) {
+    let index = directionNames.indexOf(dir);
+    return directionNames[(index + n + 8) % 8];
 }
+function WallFollower() {
+    this.dir = "s";
+}
+WallFollower.prototype.act = function (view) {
+    let start = this.dir;
+    if (view.look(dirPlus(this.dir, -3)) !== " ") {
+        start = this.dir = dirPlus(this.dir, -2);
+    }
+    while (view.look(this.dir) !== " "){
+        this.dir = dirPlus(this.dir, 1);
+        if (this.dir === start) {
+            break;
+        }
+    }
+    return {type: "move", direction: this.dir};
+};
+function LifelikeWorld(map, legend) {
+    World.call(this, map, legend);
+}
+LifelikeWorld.prototype = Object.create(World.prototype);
+let actionType = Object.create(null);
+LifelikeWorld.prototype.letAct = function (critter, vector) {
+    let action = critter.act(new View(this, vector));
+    let handled = action && actionType[action.type].call(this, critter, vector, action);
+    if (!handled){
+        critter.energy -= 0.2;
+        if (critter.energy <= 0) {
+            this.grid.set(vector, null);
+        }
+    }
+};
+actionType.grow = function (critter) {
+    critter.energy += 0.5;
+    return true;
+};
+actionType.move = function (critter, vector, action) {
+    let dest = this.checkDestination(action, vector);
+    if (dest === null || critter.energy <= 1 || this.grid.get(dest) !== null){
+        return false;
+    }
+    critter.energy -= 1;
+    this.grid.set(vector, null);
+    this.grid.set(dest, critter);
+    return true;
+};
+actionType.eat = function (critter, vector, action) {
+    let dest = this.checkDestination(action, vector);
+    let atDest = dest !== null && this.grid.get(dest);
+    if (!atDest || atDest.energy === null){
+        return false;
+    }
+    critter.energy += atDest.energy;
+    this.grid.set(dest, null);
+    return true;
+};
+actionType.reproduce = function (critter, vector, action) {
+    let baby = elementFromChar(this.legend, critter.originChar);
+    let dest = this.checkDestination(action, vector);
+    if (dest === null || critter.energy <= 2 * baby.energy || this.grid.get(dest) !== null){
+        return false;
+    }
+    critter.energy -= 2 * baby.energy;
+    this.grid.set(dest, baby);
+    return true;
+};
+function Plant() {
+    this.energy = 3 + Math.random() * 4;
+}
+Plant.prototype.act = function (context) {
+    if (this.energy > 15){
+        let space = context.find(" ");
+        if (space){
+            return {type: "reproduce", direction: space};
+        }
+    }
+    if (this.energy < 20){
+        return {type: "grow"};
+    }
+};
+function PlantEater() {
+    this.energy = 20;
+}
+PlantEater.prototype.act = function (context) {
+    let space = context.find(" ");
+    if (this.energy > 60 && space){
+        return {type: "reproduce", direction: space};
+    }
+    let plant = context.find("*");
+    if (plant){
+        return {type: "eat", direction: plant};
+    }
+    if (space){
+        return {type: "move", direction: space};
+    }
+};
+function SmartPlantEater() {
+    PlantEater.call(this);
+}
+SmartPlantEater.prototype = Object.create(PlantEater.prototype);
+SmartPlantEater.prototype.act = function (context) {
+    let space = context.find(" ");
+    if (this.energy > 40 && space){
+        return {type: "reproduce", direction: space};
+    }
+    let plant = context.find("*");
+    if (plant){
+        return {type: "eat", direction: plant};
+    }
+    if (space){
+        return {type: "move", direction: space};
+    }
+};
+function Tiger() {
+    this.energy = 60;
+}
+Tiger.prototype.act = function (context) {
+    let space = context.find(" ");
+    if (this.energy > 80 && space){
+        return {type: "reproduce", direction: space};
+    }
+    let plantEater = context.find("O");
+    if (plantEater){
+        return {type: "eat", direction: plantEater};
+    }
+    if (space){
+        return {type: "move", direction: space};
+    }
+};
+//let world = new World(plan, {"#" : Wall, "o" : BouncingCritter});
+let world = new LifelikeWorld(
+    ["####################################################",
+        "#                 ####         ****              ###",
+        "#   *  @  ##                 ########       OO    ##",
+        "#   *    ##        O O                 ****       *#",
+        "#       ##*                        ##########     *#",
+        "#      ##***  *         ****                     **#",
+        "#* **  #  *  ***      #########                  **#",
+        "#* **  #      *               #   *              **#",
+        "#     ##              #   O   #  ***          ######",
+        "#*            @       #       #   *        O  #    #",
+        "#*                    #  ######                 ** #",
+        "###          ****          ***                  ** #",
+        "#       O                        @         O       #",
+        "#   *     ##  ##  ##  ##               ###      *  #",
+        "#   **         #              *       #####  O     #",
+        "##  **  O   O  #  #    ***  ***        ###      ** #",
+        "###               #   *****                    ****#",
+        "####################################################"],
+    {"#": Wall,
+        "@": Tiger,
+        "O": SmartPlantEater, // из предыдущего упражнения
+        "*": Plant}
+);
+console.log("\nWorld to string: \n" + world.toString());
+for (let i = 0; i < 150; i++){
+    world.turn();
+}
+console.log("\nAfter Iterate " + ":\n" + world.toString());
 console.log();
 console.log("THE END.");
