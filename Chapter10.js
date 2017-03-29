@@ -41,4 +41,12 @@ console.log(stripComment("1 + /* 2 */3"));
 console.log(stripComment("x = 10; // ten!"));
 console.log(stripComment("1 /* a */ + /* b */ 1"));
 console.log();
+let name = "dead+h1[]rd";
+let text = "Dead+h1[]rd have a scar on forehead.";
+let escaped = name.replace(/[^\w\s]/g, "\\$&");
+let regexp = new RegExp("\\b(" + escaped + ")\\b", "gi");
+console.log(text.replace(regexp, "_$1_"));
+console.log();
+
+console.log();
 console.log("THE END.");
