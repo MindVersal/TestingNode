@@ -34,4 +34,11 @@ function minusOne(match, amount, unit) {
 }
 console.log(stock.replace(/(\d+) (\w+)/g, minusOne));
 console.log();
+function stripComment(code) {
+    return code.replace(/\/\/.*|\/\*[^]*?\*\//g, "");
+}
+console.log(stripComment("1 + /* 2 */3"));
+console.log(stripComment("x = 10; // ten!"));
+console.log(stripComment("1 /* a */ + /* b */ 1"));
+console.log();
 console.log("THE END.");
