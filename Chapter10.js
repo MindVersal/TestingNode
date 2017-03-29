@@ -47,6 +47,114 @@ let escaped = name.replace(/[^\w\s]/g, "\\$&");
 let regexp = new RegExp("\\b(" + escaped + ")\\b", "gi");
 console.log(text.replace(regexp, "_$1_"));
 console.log();
+let input = "String with 3 numbers ... 42 and 88.";
+let number = /\b(\d+)\b/g;
+let match;
+console.log(input);
+while (match = number.exec(input)){
+    console.log("Found ", match[1], " on ", match.index);
+}
+console.log();
+let str_ini = "searchengine=http://www.google.com/search?q=$1\
+spitefulness=9.7\
+\
+; перед комментариями ставится точка с запятой\
+; каждая секция относится к отдельному врагу\
+    [larry]\
+fullname=Larry Doe\
+type=бычара из детсада\
+website=http://www.geocities.com/CapeCanaveral/11451\
+\
+[gargamel]\
+fullname=Gargamel\
+type=злой волшебник\
+outputdir=/home/marijn/enemies/gargamel";
+function parseINI(string) {
+    let currentSection = {name: null, fields: []};
+    let categories = [currentSection];
+    string.split(/\r?\n/).forEach(function (line) {
+        let match;
+        if (/^\s*(;.*)?$/.test(line)){
+            return;
+        } else if (match = line.match(/^\[(.*)\]$/)){
+            currentSection = {name: match[1], fields: []};
+            categories.push(currentSection);
+        } else if (match = line.match(/^(\w+)=(.*)$/)){
+            currentSection.fields.push({name: match[1], value: match[2]});
+        } else {
+            throw new Error("String \'" + line + "\' have wrong data.");
+        }
+    });
+    return categories;
+}
+console.log(parseINI(str_ini));
+console.log();
+function verify(regexp, yes, no) {
+    if (regexp.source === "...") return;
+    yes.forEach(function (s) {
+        if (!regexp.test(s)){
+            console.log("Not found \'" + s + "\'");
+        }
+    });
+    no.forEach(function (s) {
+        if (regexp.test(s)){
+            console.log("Surprise found \'" + s + "\'");
+        }
+    });
+}
+verify(/.../,
+    ["my car", "bad cats"],
+    ["camper", "high art"]);
 
+verify(/.../,
+    ["pop culture", "mad props"],
+    ["plop"]);
+
+verify(/.../,
+    ["ferret", "ferry", "ferrari"],
+    ["ferrum", "transfer A"]);
+
+verify(/.../,
+    ["how delicious", "spacious room"],
+    ["ruinous", "consciousness"]);
+
+verify(/.../,
+    ["bad punctuation ."],
+    ["escape the dot"]);
+
+verify(/.../,
+    ["hottentottententen"],
+    ["no", "hotten totten tenten"]);
+
+verify(/.../,
+    ["red platypus", "wobbling nest"],
+    ["earth bed", "learning ape"]);
 console.log();
 console.log("THE END.");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
