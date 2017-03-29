@@ -133,12 +133,9 @@ console.log();
 let txt = "Testing string say: 'What your think about this?' - 'I don't known!' : I say.";
 let regexp_1 = /(\s)+(')+/g;
 let regexp_2 = /(')+(\s)+/g;
-txt = txt.replace(regexp_1, " \"");
-console.log(txt);
-txt = txt.replace(regexp_2, "\" ");
-console.log(txt);
+console.log(txt.replace(regexp_1, " \"").replace(regexp_2, "\" "));
 console.log();
-let numberExp = /^(\d+?)?\.\d+?$|^\d+?(.)?$|^\d+?E\+?\-?\d$|^\+?\d+?$|^\-?\d+?$|^(\d+?\.?)?\d+?e\+?\-?\d+?$/;
+let numberExp = /^(\d+?)?\.\d+?$|^\d+?\.?$|^\+?\d+?$|^\-?\d+?$|^(\d+?\.?)?\d+?[E,e]\+?\-?\d+?$/;
 ["1", "-1", "+15", "1.55", ".5", "5.", "1.3e2", "1E-4",
     "1e+12"].forEach(function(s) {
     if (!numberExp.test(s))
