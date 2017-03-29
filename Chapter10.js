@@ -130,6 +130,26 @@ verify(/.../,
     ["red platypus", "wobbling nest"],
     ["earth bed", "learning ape"]);
 console.log();
+let txt = "Testing string say: 'What your think about this?' - 'I don't known!' : I say.";
+let regexp_1 = /(\s)+(')+/g;
+let regexp_2 = /(')+(\s)+/g;
+txt = txt.replace(regexp_1, " \"");
+console.log(txt);
+txt = txt.replace(regexp_2, "\" ");
+console.log(txt);
+console.log();
+let numberExp = /^(\d+?)?\.\d+?$|^\d+?(.)?$|^\d+?E\+?\-?\d$|^\+?\d+?$|^\-?\d+?$|^(\d+?\.?)?\d+?e\+?\-?\d+?$/;
+["1", "-1", "+15", "1.55", ".5", "5.", "1.3e2", "1E-4",
+    "1e+12"].forEach(function(s) {
+    if (!numberExp.test(s))
+        console.log("Не нашла '" + s + "'");
+});
+["1a", "+-1", "1.2.3", "1+1", "1e4.5", ".5.", "1f5",
+    "."].forEach(function(s) {
+    if (numberExp.test(s))
+        console.log("Неправильно принято '" + s + "'");
+});
+console.log();
 console.log("THE END.");
 
 
