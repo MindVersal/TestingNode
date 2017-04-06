@@ -27,5 +27,17 @@ console.log();
 // console.log(weekDay.name(weekDay.number("Sunday")));
 let plusOne = new Function("n", "return n + 1;");
 console.log(plusOne(4));
+function require(name) {
+    if (name in require.cache)
+        return require.cache[name];
+
+    let code = new Function("exports, module", readFile(name));
+    let exports = {}, module = {exports: exports};
+    code(exports, module);
+
+    require.cache[name] = module.exports;
+    return module.exports;
+}
+require.cache = Object.create(null);
 console.log();
 console.log("THE END.");
