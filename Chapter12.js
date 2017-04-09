@@ -50,6 +50,6 @@ function parse(program) {
     }
     return result.expr;
 }
-console.log(parse("+(a, 10)"));
+console.log(parse("+(-(a, b), /(c, 10))"));
 console.log();
 console.log("THE END.");
