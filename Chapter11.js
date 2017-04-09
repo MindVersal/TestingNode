@@ -25,8 +25,8 @@ console.log();
 //     }
 // })( this.weekDay = {} );
 // console.log(weekDay.name(weekDay.number("Sunday")));
-let plusOne = new Function("n", "return n + 1;");
-console.log(plusOne(4));
+//let plusOne = new Function("n", "return n + 1;");
+//console.log(plusOne(4));
 function require(name) {
     if (name in require.cache)
         return require.cache[name];
@@ -39,5 +39,8 @@ function require(name) {
     return module.exports;
 }
 require.cache = Object.create(null);
+let weekDay = require("Ch11_weekDay.js");
+//let today = require("today");
+//console.log(require("Ch11_weekDay").name(1));
 console.log();
 console.log("THE END.");
