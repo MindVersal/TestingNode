@@ -163,5 +163,24 @@ run("do(define(pow, fun(base, exp," +
     "        1," +
     "        *(base, pow(base, -(exp, 1))))))," +
     "    print(pow(2, 10)))");
+topEnv["array"] = function () {
+    return Array.prototype.slice.call(arguments, 0);
+};
+topEnv["length"] = function (array) {
+    return array.length;
+};
+topEnv["element"] = function(array, i) {
+    return array[i];
+};
+console.log("Test Array:");
+run("do(define(sum, fun(array,",
+    "      do(define(i, 0),",
+    "         define(sum, 0),",
+    "         while(<(i, length(array)),",
+    "           do(define(sum, +(sum, element(array, i))),",
+    "              define(i, +(i, 1)))),",
+    "         sum))),",
+    "  print(sum(array(1, 2, 3))))");
+
 console.log();
 console.log("THE END.");
