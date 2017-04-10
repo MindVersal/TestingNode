@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Моя домашняя страничка</title>
+</head>
+<body>
+<h1> Моя домашняя страничка </h1>
+<p>Привет, я Марийн и это моя домашняя страничка.</p>
+<p>А ещё я книжку написал! Читайте её
+    <a href="http://eloquentjavascript.net">здесь</a>.</p>
+<p>Testing:</p>
+<script>function talksAbout(node, string) {
+    if (node.nodeType === document.ELEMENT_NODE) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+            if (talksAbout(node.childNodes[i], string))
+                return true;
+        }
+        return false;
+    } else if (node.nodeType === document.TEXT_NODE) {
+        return node.nodeValue.indexOf(string) > -1;
+    }
+}
+console.log(talksAbout(document.body, "кни"));
+let link = document.body.getElementsByTagName("a")[0];
+console.log(link.href);
+</script>
+</body>
+</html>
