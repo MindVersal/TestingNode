@@ -26,5 +26,21 @@ console.log(talksAbout(document.body, "кни"));
 let link = document.body.getElementsByTagName("a")[0];
 console.log(link.href);
 </script>
+<p>Test Replace Images:</p>
+<p>Это <img src="img/cat.png" alt="Кошка"> в
+    <img src="img/hat.png" alt="сапожках">.</p>
+<p><button onclick="replaceImages()">Заменить</button></p>
+<script>
+    function replaceImages() {
+        let images = document.body.getElementsByTagName("img");
+        for (let i = images.length - 1; i >= 0; i--){
+            let image = images[i];
+            if (image.alt){
+                let text = document.createTextNode("<--| " + image.alt + " |-->");
+                image.parentNode.replaceChild(text, image);
+            }
+        }
+    }
+</script>
 </body>
 </html>
