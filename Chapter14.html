@@ -115,5 +115,62 @@ console.log(link.href);
         }
     }
 </script>
+<p data-classified="box" style="border: 3px solid red">
+    I am inside on the Box.
+</p>
+<script>
+    let paragrafs = document.body.getElementsByTagName("p");
+    Array.prototype.forEach.call(paragrafs, function (para) {
+        if (para.getAttribute("data-classified") === "box"){
+            console.log("clientHeight:", para.clientHeight);
+            console.log("offsetHeight:", para.offsetHeight);
+        }
+    });
+</script>
+<p><span id="one"></span></p>
+<p><span id="two"></span></p>
+
+<script>
+    function time(name, action) {
+        let start = Date.now(); // Текущее время в миллисекундах
+        action();
+        console.log(name, "заняло", Date.now() - start, "ms");
+    }
+
+    time("тупо", function() {
+        let target = document.getElementById("one");
+        while (target.offsetWidth < 2000)
+            target.appendChild(document.createTextNode("X"));
+    });
+    // → тупо заняло 32 ms
+
+    time("умно", function() {
+        let target = document.getElementById("two");
+        target.appendChild(document.createTextNode("XXXXX"));
+        let total = Math.ceil(2000 / (target.offsetWidth / 5));
+        for (let i = 5; i < total; i++)
+            target.appendChild(document.createTextNode("X"));
+    });
+    // → умно заняло 1 ms
+</script>
+<p><a href=".">Обычная ссылка</a></p>
+<p><a href="." style="color: green">Зелёная ссылка</a></p>
+Текст показан <strong>встроенным</strong>,
+<strong style="display: block">в виде блока</strong>, и
+<strong style="display: none">вообще не виден</strong>.
+<p id="para" style="color: purple">
+    Красотень
+</p>
+<button onclick="styleChange()">Change Style.</button>
+<script>
+    function styleChange() {
+        let para = document.getElementById("para");
+        if (para.style.color === "purple"){
+            para.style.color = "magenta";
+        } else {
+            para.style.color = "purple";
+        }
+    }
+</script>
 </body>
 </html>
