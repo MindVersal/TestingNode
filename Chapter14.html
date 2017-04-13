@@ -247,6 +247,30 @@ console.log(link.href);
     document.body.appendChild(buildTable(MOUNTAINS));
 
 </script>
+
+<h1>Заголовок с элементом <span>span</span> внутри.</h1>
+<p>Параграф с <span>раз</span>, <span>два</span> элементами spans.</p>
+
+<script>
+    function byTagName(node, tagName) {
+        let childsByTagName = [];
+        for (let i = 0; i < node.childNodes.length; ++i) {
+            let child = node.childNodes[i];
+            if (child.nodeType === 1 && child.tagName.toLowerCase() === tagName )
+                childsByTagName.push(child);
+            if (child.childNodes.length !== 0) {
+                let childs = byTagName(child, tagName);
+                childsByTagName = childsByTagName.concat(childs);
+            }
+        }
+        return childsByTagName;
+    }
+    console.log("Count: ");
+    console.log(byTagName(document.body, "h1").length);
+    console.log(byTagName(document.body, "span").length);
+    let para = document.querySelector("p");
+    console.log(byTagName(para, "span").length);
+</script>
 </body>
 </html>
 
