@@ -42,5 +42,78 @@ console.log(link.href);
         }
     }
 </script>
+<blockquote id="quote">
+    Никакая книга не может быть закончена.
+    Во время работы над ней мы узнаём достаточно для того,
+    чтобы найти её незрелой сразу же после того, как мы отвлеклись от неё.
+</blockquote>
+<script>
+    function elt(type) {
+        let node = document.createElement(type);
+        for (let i = 1; i < arguments.length; i++){
+            let child = arguments[i];
+            if (typeof child === "string"){
+                child = document.createTextNode(child);
+            }
+            node.appendChild(child);
+        }
+        return node;
+    }
+    document.getElementById("quote").appendChild(
+        elt("footer", "-",
+            elt("strong", "Karl Popper"),
+            ", предисловие ко второму изданию ",
+            elt("em", "Открытое общество и его враги "),
+            ", 1950")
+    );
+</script>
+<p data-classified="secret">Code for starting is 000000.</p>
+<p data-classified="unclassified">The Cat have four foot.</p>
+<script>
+    let paras = document.body.getElementsByTagName("p");
+    Array.prototype.forEach.call(paras, function (para) {
+        if (para.getAttribute("data-classified") === "secret" ){
+            para.parentNode.removeChild(para);
+        }
+    });
+</script>
+
+<!--<source lang="html">-->
+<p>А вот и она, функция идентификации:</p>
+<pre data-language="javascript">
+    function id(x) { return x; }
+</pre>
+<button onclick="highlightAllCode()">Light Syntax.</button>
+<script>
+    function highlightCode(node, keywords) {
+        let text = node.textContent;
+        node.textContent = ""; // Очистим узел
+
+        let match, pos = 0;
+        while (match = keywords.exec(text)) {
+            let before = text.slice(pos, match.index);
+            node.appendChild(document.createTextNode(before));
+            let strong = document.createElement("strong");
+            strong.appendChild(document.createTextNode(match[0]));
+            node.appendChild(strong);
+            pos = keywords.lastIndex;
+        }
+        let after = text.slice(pos);
+        node.appendChild(document.createTextNode(after));
+    }
+    let languages = {
+        javascript: /\b(function|return|var)\b/g /* … etc */
+    };
+
+    function highlightAllCode() {
+        let pres = document.body.getElementsByTagName("pre");
+        for (let i = 0; i < pres.length; i++) {
+            let pre = pres[i];
+            let lang = pre.getAttribute("data-language");
+            if (languages.hasOwnProperty(lang))
+                highlightCode(pre, languages[lang]);
+        }
+    }
+</script>
 </body>
 </html>
