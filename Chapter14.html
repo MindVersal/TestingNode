@@ -204,8 +204,49 @@ console.log(link.href);
     console.log(count("p .animal"));   // Класс animal внутри <p>
     console.log(count("p > .animal")); // Прямой потомок <p>
 </script>
+<style>
+    /* Определяет стили для красивых таблиц */
+    table  { border-collapse: collapse; }
+    td, th { border: 1px solid black; padding: 3px 8px; }
+    th     { text-align: left; }
+</style>
 
+<script>
+    let MOUNTAINS = [
+        {name: "Kilimanjaro", height: 5895, country: "Tanzania"},
+        {name: "Everest", height: 8848, country: "Nepal"},
+        {name: "Mount Fuji", height: 3776, country: "Japan"},
+        {name: "Mont Blanc", height: 4808, country: "Italy/France"},
+        {name: "Vaalserberg", height: 323, country: "Netherlands"},
+        {name: "Denali", height: 6168, country: "United States"},
+        {name: "Popocatepetl", height: 5465, country: "Mexico"}
+    ];
+    function buildTable(data) {
+        let tops = Object.keys(data[0]);
+        let tableTemp = document.createElement("table");
+        let trTemp = document.createElement("tr");
+        for (let i = 0; i < tops.length; i++){
+            let thTemp = document.createElement("th");
+            thTemp.appendChild(document.createTextNode(tops[i]));
+            trTemp.appendChild(thTemp);
+        }
+        tableTemp.appendChild(trTemp);
+        for (let i = 0; i < data.length; i++){
+            let trTemp = document.createElement("tr");
+            for (let j = 0; j < tops.length; j++){
+                let tdTemp = document.createElement("td");
+                tdTemp.appendChild(document.createTextNode(data[i][tops[j]]));
+                trTemp.appendChild(tdTemp);
+            }
+            tableTemp.appendChild(trTemp);
+        }
 
+        return tableTemp;
+    }
+
+    document.body.appendChild(buildTable(MOUNTAINS));
+
+</script>
 </body>
 </html>
 
