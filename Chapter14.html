@@ -8,6 +8,24 @@
 <body>
 <h1> Моя домашняя страничка </h1>
 <p>Привет, я Марийн и это моя домашняя страничка.</p>
+<p id="cat_image"  style="text-align: center">
+    <img src="img/cat.png" style="position: relative" alt="Cat Cartoon">
+</p>
+<script>
+    let cat = document.querySelector("img");
+    let angle = 0, lastTime = null;
+    function animate(time) {
+        if (lastTime !== null){
+            angle += (time - lastTime) * 0.005;
+        }
+        lastTime = time;
+        cat.style.top = (Math.sin(angle) * 20) + "px";
+        cat.style.left = (Math.cos(angle) * 50) + "px";
+        requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+</script>
+
 <p>А ещё я книжку написал! Читайте её
     <a href="http://eloquentjavascript.net">здесь</a>.</p>
 <p>Testing:</p>
@@ -36,7 +54,7 @@ console.log(link.href);
         for (let i = images.length - 1; i >= 0; i--){
             let image = images[i];
             if (image.alt){
-                let text = document.createTextNode("<--| " + image.alt + " |-->");
+                let text = document.createTextNode("<-| " + image.alt + " |->");
                 image.parentNode.replaceChild(text, image);
             }
         }
@@ -78,7 +96,6 @@ console.log(link.href);
     });
 </script>
 
-<!--<source lang="html">-->
 <p>А вот и она, функция идентификации:</p>
 <pre data-language="javascript">
     function id(x) { return x; }
@@ -172,5 +189,39 @@ console.log(link.href);
         }
     }
 </script>
+<p>Люблю грозу в начале
+    <span class="animal">мая</span></p>
+<p>Когда весенний первый гром</p>
+<p>Как бы <span class="animal">резвяся
+  <span class="animal">и играя</span></span></p>
+<p>Грохочет в небе голубом.</p>
+<script>
+    function count(selector) {
+        return document.querySelectorAll(selector).length;
+    }
+    console.log(count("p"));           // Все элементы <p>
+    console.log(count(".animal"));     // Класс animal
+    console.log(count("p .animal"));   // Класс animal внутри <p>
+    console.log(count("p > .animal")); // Прямой потомок <p>
+</script>
+
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
