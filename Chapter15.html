@@ -5,17 +5,29 @@
     <title>Chapter15</title>
 </head>
 <body>
-<button>Press gently.</button>
+<button id="button_1">Press gently.</button>
 <p>Press on document for once start catcher .</p>
 <script>
-    let button = document.querySelector("button");
+    let button_1 = document.getElementById("button_1");
     function once() {
         console.log("Button pressed once!");
-        button.removeEventListener("click",once);
+        button_1.removeEventListener("click",once);
     }
-    button.addEventListener("click", once);
-    
-</script>
+    button_1.addEventListener("click", once);
 
+</script>
+<button id="button_2">Press what you want!</button>
+<script>
+    let button_2 = document.getElementById("button_2");
+    button_2.addEventListener("mousedown", function (event) {
+        if (event.which === 1){
+            console.log("Left!");
+        } else if (event.which === 2){
+            console.log("Middle!");
+        } else if (event.which === 3){
+            console.log("Right!");
+        }
+    });
+</script>
 </body>
 </html>
