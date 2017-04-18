@@ -29,5 +29,29 @@
         }
     });
 </script>
+<p id="para_1">Paragraph with <button id="button_3">button</button>.</p>
+<script>
+    let para_1 = document.getElementById("para_1");
+    let button_3 = document.getElementById("button_3");
+    para_1.addEventListener("mousedown", function () {
+        console.log("Catcher From Paragraph!");
+    });
+    button_3.addEventListener("mousedown", function (event) {
+        console.log("Catcher from button_3");
+        if (event.which === 3){
+            event.stopPropagation();
+        }
+    });
+</script>
+<button id="button_a">A</button>
+<button id="button_b">B</button>
+<button id="button_c">C</button>
+<script>
+    document.body.addEventListener("click", function (event) {
+        if (event.target.nodeName === "BUTTON"){
+            console.log("Clicked", event.target.textContent);
+        }
+    });
+</script>
 </body>
 </html>
