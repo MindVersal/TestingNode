@@ -178,5 +178,30 @@
         }
     });
 </script>
+<p>Censored Input: <input type="text" id="input_test"></p>
+<script>
+    let field = document.querySelector("#input_test");
+    let charCodeBigQ = 81;
+    let charCodeBigW = 87;
+    let charCodeBigX = 88;
+    let charCodeSmallQ = 113;
+    let charCodeSmallW = 119;
+    let charCodeSmallX = 120;
+    let charForCensored = [charCodeBigQ, charCodeBigW, charCodeBigX,
+                            charCodeSmallQ, charCodeSmallW, charCodeSmallX];
+    field.addEventListener("keydown", function (event) {
+        let charIsCensored = false;
+        for (let i = 0; i < charForCensored.length; i++){
+            if (event.keyCode === charForCensored[i]){
+                charIsCensored = true;
+                break;
+            }
+        }
+        if (charIsCensored){
+            event.preventDefault();
+        }
+    });
+</script>
+
 </body>
 </html>
