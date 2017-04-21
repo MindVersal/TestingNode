@@ -202,7 +202,6 @@
         }
     });
 </script>
-
 <style>
     .trail {
         position: absolute;
@@ -219,7 +218,6 @@
     }
     function shiftMouseTrailPoints(event) {
         let dotsTrail = document.querySelectorAll(".trail");
-        console.log(dotsTrail.length);
         for (let i = dotsTrail.length - 1; i >= 0; i--){
             dotsTrail[i].parentNode.removeChild(dotsTrail[i]);
         }
@@ -247,5 +245,30 @@
         }
     });
 </script>
+<div id="wrapper">
+    <div data-tabname="one">Tab One</div>
+    <div data-tabname="two">Tab Two</div>
+    <div data-tabname="three">Tab Tree</div>
+</div>
+<script>
+    function asTabs(node) {
+        let childNode = node.childNodes;
+        for (let i = 0; i < childNode.length; i++){
+//            if (childNode.type === )
+            console.log(i + " " + childNode.item(i).textContent);
+        }
+
+    }
+    asTabs(document.querySelector("#wrapper"));
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
