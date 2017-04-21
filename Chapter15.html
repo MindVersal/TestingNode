@@ -213,25 +213,26 @@
 </style>
 <script>
     let mouseTrailPoints = [];
-    let countTrails = 5;
+    let countTrails = 25;
     for (let i = 0; i < countTrails; i++){
         mouseTrailPoints.push({localPageX: 0, localPageY:0});
     }
-
     function shiftMouseTrailPoints(event) {
-        let dotsTrail = document.querySelector(".trail");
-//        for (let i = dotsTrail.length - 1; i >= 0; i){
-//            dotsTrail[i].parentNode.removeChild(dotsTrail[i]);
-//        }
+        let dotsTrail = document.querySelectorAll(".trail");
+        console.log(dotsTrail.length);
+        for (let i = dotsTrail.length - 1; i >= 0; i--){
+            dotsTrail[i].parentNode.removeChild(dotsTrail[i]);
+        }
         for (let i = countTrails - 1; i > 0; i--){
             mouseTrailPoints[i] = mouseTrailPoints[i - 1];
         }
-        mouseTrailPoints[0] = {localPageX: event.pageX, localPageY: event.pageY};
+        mouseTrailPoints[0] = {localPageX: event.pageX - 6, localPageY:event.pageY - 6};
+
         for (let i = 0; i < countTrails; i++){
             let dotTrail = document.createElement("div");
             dotTrail.className = "trail";
-            dotTrail.style.left = (mouseTrailPoints[i].localPageX - 6) + "px";
-            dotTrail.style.top  = (mouseTrailPoints[i].localPageY - 6) + "px";
+            dotTrail.style.left = (mouseTrailPoints[i].localPageX) + "px";
+            dotTrail.style.top  = (mouseTrailPoints[i].localPageY) + "px";
             document.body.appendChild(dotTrail);
         }
     }
@@ -242,7 +243,7 @@
             setTimeout(function () {
                 scheduledTrail = false;
                 shiftMouseTrailPoints(lastEvent);
-            }, 250);
+            }, 100);
         }
     });
 </script>
