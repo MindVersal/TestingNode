@@ -231,6 +231,30 @@
             }
         }
     };
+    let maxStep = 0.05;
+    Level.prototype.animate = function (step, keys) {
+        if (this.status !== null){
+            this.finishDelay -= step;
+        }
+        while(step > 0){
+            let thisStep = Math.min(step, maxStep);
+            this.actors.forEach(function (actor) {
+                actor.act(thisStep, this, keys);
+            }, this);
+            step -= thisStep;
+        }
+    };
+    Lava.prototype.act = function (step, level) {
+        let newPos = this.pos.plus(this.speed.times(step));
+        if (!level.obstacleAt(newPos, this.size)){
+            this.pos = newPos;
+        } else if (this.repeatPos){
+            this.pos = this.repeatPos;
+        } else {
+            this.speed = this.speed.times(-1);
+        }
+    };
+
 </script>
 
 
