@@ -323,10 +323,8 @@
             }
         }
     };
-    let arrowCodes = {37: "left", 38: "up", 39: "right", 27: "esc"};
     let pauseGame = false;
     function trackKeys(codes) {
-
         let pressed = Object.create(null);
         function handler(event) {
             if (codes.hasOwnProperty(event.keyCode) && event.keyCode !== 27){
@@ -363,8 +361,10 @@
         }
         requestAnimationFrame(frame);
     }
-    let arrows = trackKeys(arrowCodes);
+
     function runLevel(level, Display, andThen) {
+        let arrowCodes = {37: "left", 38: "up", 39: "right", 27: "esc"};
+        let arrows = trackKeys(arrowCodes);
         let display = new Display(document.body, level);
         runAnimation(function (step) {
             if (!pauseGame){
@@ -376,6 +376,7 @@
                 if (andThen){
                     andThen(level.status);
                 }
+                arrows = null;
                 return false;
             }
         });
