@@ -323,6 +323,20 @@
             }
         }
     };
+    let arrowCodes = {37: "left", 38: "up", 39: "right"};
+    function trackKeys(codes) {
+        let pressed = Object.create(null);
+        function handler(event) {
+            if (code.hasOwnProperty(event.keyCode)){
+                let down = event.type === "keydown";
+                pressed[codes[event.keyCode]] = down;
+                event.preventDefault();
+            }
+        }
+        addEventListener("keydown", handler);
+        addEventListener("keyup", handler);
+        return pressed;
+    }
 
 </script>
 
