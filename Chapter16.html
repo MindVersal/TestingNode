@@ -43,17 +43,6 @@
     }
 </style>
 <script>
-    let simpleLevelPlan = [
-        "                      ",
-        "                      ",
-        "  x              = x  ",
-        "  x         o o    x  ",
-        "  x @      xxxxx   x  ",
-        "  xxxxx            x  ",
-        "      x!!!!!!!!!!!!x  ",
-        "      xxxxxxxxxxxxxx  ",
-        "                      "
-    ];
     function Level(plan) {
         this.width = plan[0].length;
         this.height = plan.length;
@@ -197,10 +186,6 @@
     DOMDisplay.prototype.clear = function () {
         this.wrap.parentNode.removeChild(this.wrap);
     };
-
-    //let simpleLevel = new Level(simpleLevelPlan);
-    //let display = new DOMDisplay(document.body, simpleLevel);
-
     Level.prototype.obstacleAt = function (pos, size) {
         let xStart = Math.floor(pos.x);
         let xEnd = Math.ceil(pos.x + size.x);
@@ -361,7 +346,6 @@
         }
         requestAnimationFrame(frame);
     }
-
     function runLevel(level, Display, andThen) {
         let arrowCodes = {37: "left", 38: "up", 39: "right", 27: "esc"};
         let arrows = trackKeys(arrowCodes);
@@ -382,7 +366,7 @@
         });
     }
     function runGame(plans, Display) {
-        let countLive = 2;
+        let countLive = 9;
         function startLevel(n) {
             runLevel(new Level(plans[n]), Display, function (status) {
                 if (status === "lost" && countLive > 1){
