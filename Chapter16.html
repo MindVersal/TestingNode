@@ -357,7 +357,9 @@
         let display = new Display(document.body, level);
         runAnimation(function (step) {
             level.animate(step, arrows);
-            display.drawFrame(step);
+            if (!arrows.esc){
+                display.drawFrame(step);
+            }
             if (level.isFinished()){
                 display.clear();
                 if (andThen){
