@@ -355,9 +355,10 @@
     let arrows = trackKeys(arrowCodes);
     function runLevel(level, Display, andThen) {
         let display = new Display(document.body, level);
+        let pause = false;
         runAnimation(function (step) {
-            level.animate(step, arrows);
             if (!arrows.esc){
+                level.animate(step, arrows);
                 display.drawFrame(step);
             }
             if (level.isFinished()){
