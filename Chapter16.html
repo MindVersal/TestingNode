@@ -368,20 +368,30 @@
         });
     }
     function runGame(plans, Display) {
+        let countLive = 2;
         function startLevel(n) {
             runLevel(new Level(plans[n]), Display, function (status) {
-                if (status === "lost"){
+                if (status === "lost" && countLive > 1){
+                    countLive--;
                     startLevel(n);
+                } else if (status === "lost" && countLive <= 1) {
+                    console.log("You lose...");
+                    infoText("You lose...");
                 } else if (n < plans.length - 1){
                     startLevel(n + 1);
                 } else {
                     console.log("You win!");
+                    infoText("You win!");
                 }
             });
         }
         startLevel(0);
     }
-
+    function infoText(text) {
+        let infoText = document.createElement("div");
+        infoText.textContent = text;
+        document.body.appendChild(infoText);
+    }
     let GAME_LEVELS = [
         ["                                                                                ",
             "                                                                                ",
