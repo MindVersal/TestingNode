@@ -198,8 +198,8 @@
         this.wrap.parentNode.removeChild(this.wrap);
     };
 
-    let simpleLevel = new Level(simpleLevelPlan);
-    let display = new DOMDisplay(document.body, simpleLevel);
+    //let simpleLevel = new Level(simpleLevelPlan);
+    //let display = new DOMDisplay(document.body, simpleLevel);
 
     Level.prototype.obstacleAt = function (pos, size) {
         let xStart = Math.floor(pos.x);
@@ -224,7 +224,7 @@
             let other = this.actors[i];
             if (other !== actor &&
                     actor.pos.x + actor.size.x > other.pos.x &&
-                    actor.pos.x < other.pos..x + other.size.x &&
+                    actor.pos.x < other.pos.x + other.size.x &&
                     actor.pos.y + actor.size.y > other.pos.y &&
                     actor.pos.y < other.pos.y + other.size.y){
                 return other;
@@ -327,7 +327,7 @@
     function trackKeys(codes) {
         let pressed = Object.create(null);
         function handler(event) {
-            if (code.hasOwnProperty(event.keyCode)){
+            if (codes.hasOwnProperty(event.keyCode)){
                 let down = event.type === "keydown";
                 pressed[codes[event.keyCode]] = down;
                 event.preventDefault();
@@ -358,7 +358,7 @@
         runAnimation(function (step) {
             level.animate(step, arrows);
             display.drawFrame(step);
-            if (level.isFinished){
+            if (level.isFinished()){
                 display.clear();
                 if (andThen){
                     andThen(level.status);
