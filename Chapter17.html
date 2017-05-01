@@ -156,9 +156,23 @@
     });
 
 </script>
+<canvas id="canvas_13"></canvas>
+<script>
+    let cx_13 = document.getElementById("canvas_13").getContext("2d");
+    cx_13.scale(3, .5);
+    cx_13.beginPath();
+    cx_13.arc(50, 50, 40, 0, 7);
+    cx_13.lineWidth = 3;
+    cx_13.stroke();
 
-
-
+</script>
+<script>
+    function flipHorizontally(context, around) {
+        context.translate(around, 0);
+        context.scale(-1, 1);
+        context.translate(-around, 0);
+    }
+</script>
 
 
 
