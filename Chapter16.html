@@ -530,7 +530,7 @@
     function CanvasDisplay(parent, level) {
         this.canvas = document.createElement("canvas");
         this.canvas.width = Math.min(600, level.width * scale);
-        this.canvas.height = Math.min(300, level.height * scale);
+        this.canvas.height = Math.min(450, level.height * scale);
         parent.appendChild(this.canvas);
         this.cx = this.canvas.getContext("2d");
         this.level = level;
@@ -580,8 +580,8 @@
         }
         this.cx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     };
-    let otherSprites = document.createEventObject("img");
-    otherSprites.src = "img/sprites.png";
+    let otherSprites = document.createElement("img");
+    otherSprites.src = "img/sprites_2.png";
     CanvasDisplay.prototype.drawBackground = function () {
         let view = this.viewport;
         let xStart = Math.floor(view.left);
@@ -602,7 +602,7 @@
         }
     };
     let playerSprites = document.createElement("img");
-    playerSprites.src = "img/player.png";
+    playerSprites.src = "img/player_2.png";
     let playerXOverlap = 4;
     function flipHorizontally(context, around) {
         context.translate(around, 0);
