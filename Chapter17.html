@@ -187,9 +187,24 @@
     });
 
 </script>
-
-
-
+<p></p>
+<canvas id="canvas_15" width="600" height="300"></canvas>
+<script>
+    let cx_15 = document.getElementById("canvas_15").getContext("2d");
+    function branch(length, angle, scale) {
+        cx_15.fillRect(0, 0, 1, length);
+        if (length < 8) return;
+        cx_15.save();
+        cx_15.translate(0, length);
+        cx_15.rotate(-angle);
+        branch(length * scale, angle, scale);
+        cx_15.rotate(2 * angle);
+        branch(length * scale, angle, scale);
+        cx_15.restore();
+    }
+    cx_15.translate(300, 0);
+    branch(60, 0.5, 0.8);
+</script>
 
 
 
