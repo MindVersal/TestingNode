@@ -173,6 +173,22 @@
         context.translate(-around, 0);
     }
 </script>
+<canvas id="canvas_14"></canvas>
+<script>
+    let cx_14 = document.getElementById("canvas_14").getContext("2d");
+    let img_14 = document.createElement("img");
+    img_14.src = "img/player.png";
+    let spriteW_14 = 48;
+    let spriteH_14 = 60;
+    img_14.addEventListener("load", function () {
+        flipHorizontally(cx_14, 100 + spriteW_14 / 2);
+        cx_14.drawImage(img_14, 0, 0, spriteW_14, spriteH_14,
+                            100, 0, spriteW_14, spriteH_14);
+    });
+
+</script>
+
+
 
 
 
