@@ -117,12 +117,45 @@
     });
 
 </script>
+<canvas id="canvas_10"></canvas>
+<script>
+    let cx_10 = document.getElementById("canvas_10").getContext("2d");
+    cx_10.font = "28px Georgia";
+    cx_10.fillStyle = "fuchsia";
+    cx_10.fillText("I may drawing!", 10, 50);
 
+</script>
+<canvas id="canvas_11"></canvas>
+<script>
+    let cx_11 = document.getElementById("canvas_11").getContext("2d");
+    let img = document.createElement("img");
+    img.src = "img/hat.png";
+    img.addEventListener("load", function () {
+        for (let x = 10; x < 100; x += 10){
+            cx_11.drawImage(img, x, 50);
+        }
+    });
 
+</script>
+<canvas id="canvas_12"></canvas>
+<script>
+    let cx_12 = document.getElementById("canvas_12").getContext("2d");
+    let img_12 = document.createElement("img");
+    img_12.src = "img/player.png";
+    let spriteW = 48;
+    let spriteH = 60;
+    img_12.addEventListener("load", function () {
+        let cycle = 0;
+        setInterval(function () {
+            cx_12.clearRect(0, 0, spriteW, spriteH);
+            cx_12.drawImage(img_12,
+                                cycle * spriteW, 0, spriteW, spriteH,
+                                0,               0, spriteW, spriteH);
+            cycle = (cycle + 1) % 8;
+        }, 120);
+    });
 
-
-
-
+</script>
 
 
 
