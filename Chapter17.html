@@ -205,8 +205,71 @@
     cx_15.translate(300, 0);
     branch(60, 0.5, 0.8);
 </script>
-
-
+<canvas id="canvas_16" width="600" height="300"></canvas>
+<script>
+    let cx_16 = document.getElementById("canvas_16").getContext("2d");
+    function drawTrapeciya(context, x1, y1, x2, y2, x3, y3, x4, y4) {
+        context.beginPath();
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.lineTo(x3, y3);
+        context.lineTo(x4, y4);
+        context.lineTo(x1, y1);
+        context.stroke();
+    }
+    drawTrapeciya(cx_16, 30, 10, 50, 10, 60, 30, 20, 30);
+    function drawRomb(context, centerX, centerY, side, color) {
+        context.beginPath();
+        context.fillStyle = color;
+        let margin = Math.abs(side / Math.sqrt(2));
+        context.moveTo(centerX, centerY - margin);
+        context.lineTo(centerX + margin, centerY);
+        context.lineTo(centerX, centerY + margin);
+        context.lineTo(centerX - margin, centerY);
+        context.closePath();
+        context.fill();
+    }
+    drawRomb(cx_16, 80, 20, 20, "red");
+    function drawZigZag(context, leftX, leftY, width, height, countLines) {
+        context.beginPath();
+        context.moveTo(leftX, leftY);
+        let dist = Math.floor(height / countLines);
+        for (let i = 0; i < countLines; i++){
+            context.lineTo(leftX + (i % 2 === 0 ? 0 : width), leftY + dist * i);
+        }
+        context.stroke();
+    }
+    drawZigZag(cx_16, 120, 10, 40, 40, 9);
+    function drawSpiral(context, centerX, centerY, countRound) {
+        context.beginPath();
+        context.moveTo(centerX, centerY);
+        let angleTotal = countRound * 360;
+        for (let angle = 0, radius = 0; angle < angleTotal; angle += 10, radius += 0.1){
+            context.lineTo(centerX + Math.sin(angle * Math.PI / 180) * radius,
+                            centerY + Math.cos(angle * Math.PI / 180) * radius);
+        }
+        context.stroke();
+    }
+    drawSpiral(cx_16, 200, 30, 8);
+    function drawStar(context, centerX, centerY, countRay, color) {
+        context.beginPath();
+        context.fillStyle = color;
+        context.moveTo(centerX, centerY);
+        let angleRotate = 360 / countRay;
+        let radius = 30;
+        context.moveTo(centerX + Math.cos(0) * radius,
+            centerY + Math.sin(0) * radius);
+        for (let angle = 0; angle < 360; angle += angleRotate){
+            context.quadraticCurveTo(centerX,
+                                        centerY,
+                                     centerX + Math.cos((angle + angleRotate) * Math.PI / 180) * radius,
+                                        centerY + Math.sin((angle + angleRotate) * Math.PI / 180) * radius);
+        }
+        context.closePath();
+        context.fill();
+    }
+    drawStar(cx_16, 260, 30, 8, "orange");
+</script>
 
 
 </body>
