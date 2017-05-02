@@ -290,7 +290,8 @@
 </script>
 <canvas id="canvas_17" width="400" height="400"></canvas>
 <script>
-    let cx_17 = document.getElementById("canvas_17").getContext("2d");
+    let cx_17_canvas = document.getElementById("canvas_17");
+    let cx_17 = cx_17_canvas.getContext("2d")
     let lastTime = null;
     function frame(time) {
         if (lastTime !== null){
@@ -300,33 +301,37 @@
         requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
-    let centerBallX = 200;
-    let centerBallY = 200;
     let radiusBall = 50;
     let directBallX = 1;
     let directBallY = 1;
-    let speedX = 90;
-    let speedY = 50;
+    let speedX = Math.floor(50 + Math.random() * 100);
+    let speedY = Math.floor(50 + Math.random() * 100);
+    let xStart = 0;
+    let xEnd = cx_17_canvas.width;
+    let yStart = 0;
+    let yEnd = cx_17_canvas.height;
+    let centerBallX = Math.floor(radiusBall + Math.random() * (xEnd - 2 * radiusBall));
+    let centerBallY = Math.floor(radiusBall + Math.random() * (yEnd - 2 * radiusBall));
     function updateAnimation(step) {
-        if (centerBallX + radiusBall > 400){
+        if (centerBallX + radiusBall > xEnd){
             directBallX = -1;
         }
-        if (centerBallX - radiusBall < 0){
+        if (centerBallX - radiusBall < xStart){
             directBallX = 1;
         }
-        if (centerBallY + radiusBall > 400){
+        if (centerBallY + radiusBall > yEnd){
             directBallY = -1;
         }
-        if (centerBallY - radiusBall < 0){
+        if (centerBallY - radiusBall < yStart){
             directBallY = 1;
         }
         centerBallX += step * speedX * directBallX;
         centerBallY += step * speedY * directBallY;
         cx_17.beginPath();
         cx_17.fillStyle = "white";
-        cx_17.fillRect(0, 0, 400, 400);
+        cx_17.fillRect(xStart, yStart, xEnd, yEnd);
         cx_17.fill();
-        cx_17.strokeRect(0, 0, 400, 400);
+        cx_17.strokeRect(xStart, yStart, xEnd, yEnd);
         cx_17.arc(centerBallX, centerBallY, radiusBall, 0, 2 * Math.PI);
         cx_17.stroke();
     }
