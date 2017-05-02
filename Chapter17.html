@@ -288,8 +288,49 @@
     }
     drawStar(cx_16, 260, 30, 8, "orange");
 </script>
-
-
+<canvas id="canvas_17" width="400" height="400"></canvas>
+<script>
+    let cx_17 = document.getElementById("canvas_17").getContext("2d");
+    let lastTime = null;
+    function frame(time) {
+        if (lastTime !== null){
+            updateAnimation(Math.min(100, time - lastTime) / 1000);
+        }
+        lastTime = time;
+        requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    let centerBallX = 200;
+    let centerBallY = 200;
+    let radiusBall = 50;
+    let directBallX = 1;
+    let directBallY = 1;
+    let speedX = 90;
+    let speedY = 50;
+    function updateAnimation(step) {
+        if (centerBallX + radiusBall > 400){
+            directBallX = -1;
+        }
+        if (centerBallX - radiusBall < 0){
+            directBallX = 1;
+        }
+        if (centerBallY + radiusBall > 400){
+            directBallY = -1;
+        }
+        if (centerBallY - radiusBall < 0){
+            directBallY = 1;
+        }
+        centerBallX += step * speedX * directBallX;
+        centerBallY += step * speedY * directBallY;
+        cx_17.beginPath();
+        cx_17.fillStyle = "white";
+        cx_17.fillRect(0, 0, 400, 400);
+        cx_17.fill();
+        cx_17.strokeRect(0, 0, 400, 400);
+        cx_17.arc(centerBallX, centerBallY, radiusBall, 0, 2 * Math.PI);
+        cx_17.stroke();
+    }
+</script>
 
 
 
