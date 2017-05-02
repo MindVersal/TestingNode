@@ -93,7 +93,7 @@
     cx_8.arc(150, 50, 40, 0, 0.5 * Math.PI);
     cx_8.stroke();
 </script>
-<canvas id="canvas_9" width="200" height="200"></canvas>
+<canvas id="canvas_9" width="600" height="300"></canvas>
 <script>
     let result = [
         {name: "Удовлетворён", count: 1043, color: "lightblue"},
@@ -106,13 +106,31 @@
         return sum + choise.count;
     }, 0);
     let currentAngle = -0.5 * Math.PI;
-    result.forEach(function (result) {
+    let centerX = 300;
+    let centerY = 150;
+    let radius = 100;
+    let textCurrentAngle = 180;
+    result.forEach(function (result, index) {
         let sliceAngle = (result.count / total) * 2 * Math.PI;
         cx_9.beginPath();
-        cx_9.arc(100, 100, 100, currentAngle, currentAngle + sliceAngle);
+        cx_9.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
         currentAngle += sliceAngle;
-        cx_9.lineTo(100, 100);
+        cx_9.lineTo(centerX, centerY);
         cx_9.fillStyle = result.color;
+        cx_9.font = "14px Arial";
+        cx_9.textAlign = "center";
+        cx_9.fillText(result.name,centerX + 180, centerY - 50 + index * 30);
+        cx_9.fill();
+        cx_9.beginPath();
+        cx_9.fillStyle = "red";
+        let textAngle = result.count / total * 360;
+        textCurrentAngle -= textAngle;
+        let textProcent = textAngle * 100 / 360;
+        if (textProcent > 5) {
+            cx_9.fillText(Math.floor(textProcent) + "%",
+                centerX + Math.sin((textCurrentAngle + textAngle / 2) * Math.PI / 180) * (radius - 30),
+                centerY + Math.cos((textCurrentAngle + textAngle / 2) * Math.PI / 180) * (radius - 30));
+        }
         cx_9.fill();
     });
 
@@ -270,6 +288,27 @@
     }
     drawStar(cx_16, 260, 30, 8, "orange");
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </body>
