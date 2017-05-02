@@ -6,13 +6,15 @@
 </head>
 <body>
 <script>
-    let req = new XMLHttpRequest();
-    req.open("GET", "example/data.txt", true);
-    req.addEventListener("load", function () {
-        console.log("Status: ", req.status);
-        console.log("Done: ", req.responseText);
+    let req_1 = new XMLHttpRequest();
+    req_1.open("GET", "example/data.txt", true);
+    req_1.addEventListener("load", function () {
+        console.log("Status: ", req_1.status);
+        console.log("Done: ", req_1.responseText);
     });
-    req.send(null);
+    req_1.send(null);
+
+
 </script>
 
 
