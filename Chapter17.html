@@ -125,9 +125,9 @@
         cx_9.fillStyle = "red";
         let textAngle = result.count / total * 360;
         textCurrentAngle -= textAngle;
-        let textProcent = textAngle * 100 / 360;
-        if (textProcent > 5) {
-            cx_9.fillText(Math.floor(textProcent) + "%",
+        let textPercent = textAngle * 100 / 360;
+        if (textPercent > 5) {
+            cx_9.fillText(Math.floor(textPercent) + "%",
                 centerX + Math.sin((textCurrentAngle + textAngle / 2) * Math.PI / 180) * (radius - 30),
                 centerY + Math.cos((textCurrentAngle + textAngle / 2) * Math.PI / 180) * (radius - 30));
         }
