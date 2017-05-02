@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 18.</title>
+</head>
+<body>
+<script>
+    let req = new XMLHttpRequest();
+    req.open("GET", "example/data.txt", true);
+    req.addEventListener("load", function () {
+        console.log("Status: ", req.status);
+        console.log("Done: ", req.responseText);
+    });
+    req.send(null);
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
