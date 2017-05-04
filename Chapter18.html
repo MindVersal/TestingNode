@@ -156,13 +156,13 @@
             fail(new Error("Bombs..."));
         });
     }
-//    all([soon(1), fail(), soon(3)]).then(function (array) {
-//        console.log("This is not in...");
-//    }, function (error) {
-//        if (error.message !== "Bombs..."){
-//            console.log("Surprise error... " + error);
-//        }
-//    })
+    all([soon(1), fail(), soon(3)]).then(function (array) {
+        console.log("This is not in...");
+    }, function (error) {
+        if (error.message !== "Bombs..."){
+            console.log("Surprise error... " + error);
+        }
+    })
 </script>
 
 
