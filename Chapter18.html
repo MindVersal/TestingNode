@@ -82,6 +82,9 @@
     }, function (error) {
         console.log("Failed to fetch data.txt: " + error);
     });
+    function getJSON(url) {
+        return get(url).then(JSON.parse);
+    }
 
 </script>
 
