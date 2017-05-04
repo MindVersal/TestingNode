@@ -104,9 +104,62 @@
         document.body.removeChild(loading);
     })
 
+
 </script>
+<p>Testing Accept:</p>
+<script>
+    let req_5 = new XMLHttpRequest();
+    req_5.open("GET", "http://eloquentjavascript.net/author", true);
+    req_5.setRequestHeader("Accept", "application/rainbows+unicorns");
+    req_5.addEventListener("load", function () {
+        console.log("\n");
+        console.log(req_5.responseText);
+    });
+    req_5.send(null);
 
-
+</script>
+<script>
+    console.log("\n\nTest many Promise...");
+    function all(promises) {
+        return new Promise(function (success, fail) {
+            let promisesAnswer = [];
+            for (let i = 0; i < promises.length; i++){
+                promises[i].then(function (element) {
+                    promisesAnswer.push(element);
+                    console.log(element);
+                }, function (error) {
+                    fail(new Error("Unknown error: " + error));
+                });
+            }
+            success(promisesAnswer);
+        });
+    }
+    all([]).then(function (array) {
+        console.log("This must be []: " + array);
+    });
+    function soon(val) {
+        return new Promise(function (success) {
+            setTimeout(function () {
+                success(val);
+            }, Math.random() * 500);
+        });
+    }
+    all([soon(1), soon(2), soon(3)]).then(function (array) {
+        console.log("This must be [1, 2, 3]: ", array);
+    });
+    function fail() {
+        return new Promise(function (success, fail) {
+            fail(new Error("Bombs..."));
+        });
+    }
+//    all([soon(1), fail(), soon(3)]).then(function (array) {
+//        console.log("This is not in...");
+//    }, function (error) {
+//        if (error.message !== "Bombs..."){
+//            console.log("Surprise error... " + error);
+//        }
+//    })
+</script>
 
 
 
