@@ -60,7 +60,28 @@
             console.log("nonsense.txt: " + context);
         }
     });
-
+    function get(url) {
+        return new Promise(function (success, fail) {
+            let req = new XMLHttpRequest();
+            req.open("GET", url, true);
+            req.addEventListener("load", function () {
+                if (req.status < 400){
+                    success(req.responseText);
+                } else {
+                    fail(new Error("Request failed: " + req.statusText));
+                }
+            });
+            req.addEventListener("error", function () {
+                fail(new Error("Network error."));
+            });
+            req.send(null);
+        });
+    }
+    get("example/data.txt").then(function (text) {
+        console.log("data.txt: " + text);
+    }, function (error) {
+        console.log("Failed to fetch data.txt: " + error);
+    });
 
 </script>
 
