@@ -86,6 +86,24 @@
         return get(url).then(JSON.parse);
     }
 
+    function showMessage(msg) {
+        let elt = document.createElement("div");
+        elt.textContent = msg;
+        return document.body.appendChild(elt);
+    }
+    let loading = showMessage("Loading...");
+    getJSON("example/bert.json").then(function (bert) {
+        return getJSON(bert.spouse);
+    }).then(function (spouse) {
+        return getJSON(spouse.mother);
+    }).then(function (mother) {
+        showMessage("Name - " + mother.name);
+    }).catch(function (error) {
+        showMessage(String(error));
+    }).then(function () {
+        document.body.removeChild(loading);
+    })
+
 </script>
 
 
