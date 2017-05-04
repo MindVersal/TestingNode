@@ -122,20 +122,24 @@
     console.log("\n\nTest many Promise...");
     function all(promises) {
         return new Promise(function (success, fail) {
-            let promisesAnswer = [];
-            for (let i = 0; i < promises.length; i++){
-                promises[i].then(function (element) {
-                    promisesAnswer.push(element);
-                    console.log(element);
-                }, function (error) {
-                    fail(new Error("Unknown error: " + error));
+            let promisesAnswer = new Array(promises.length);
+            let countAnswer = promises.length;
+            promises.forEach(function (elem, index) {
+                elem.then(function (elemAnswer) {
+                    promisesAnswer[index] = elemAnswer;
+                    countAnswer--;
+                    if (countAnswer === 0){
+                        success(promisesAnswer);
+                    }
                 });
+            });
+            if (countAnswer === 0){
+                success(promisesAnswer);
             }
-            success(promisesAnswer);
         });
     }
     all([]).then(function (array) {
-        console.log("This must be []: " + array);
+        console.log("This must be []: ", array);
     });
     function soon(val) {
         return new Promise(function (success) {
