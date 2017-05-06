@@ -92,9 +92,46 @@
 
 </script>
 
+<div id="grid"></div>
+<button id="next">Next generation.</button>
+<script>
+    let widthPole = 10;
+    let heightPole = 10;
+    let currentPole = [];
+    function fillCurrentPole(pole) {
+        for (let j = 0; j < heightPole; j++){
+            let rowPole = [];
+            for (let i = 0; i < widthPole; i++){
+                rowPole.push((Math.random() < 0.5) ? 0 : 1);
+            }
+            pole.push(rowPole);
+        }
+    }
+    fillCurrentPole(currentPole);
+    function printPole(pole) {
+        for (let j = 0; j < heightPole; j++){
+            console.log(pole[j].join(" "));
+        }
+    }
+    printPole(currentPole);
+    function countNeig(rowPole, colPole) {
+
+    }
+    function nextStep(pole) {
+        let newPole = [];
+        for (let j = 0; j < heightPole; j++){
+            let rowPole = [];
+            for (let i = 0; i < widthPole; i++){
 
 
-
+            }
+            newPole.push(rowPole);
+        }
+        return newPole;
+    }
+    let testArray = [1, 2, 3];
+    console.log(testArray, testArray[-1] === undefined);
+</script>
 
 
 
