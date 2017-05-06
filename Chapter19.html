@@ -94,23 +94,26 @@
 <br/>
 <br/>
 <div id="grid"></div>
-<button id="next">Next generation.</button>
+<button id="next" onclick="nextFillGrid()">Next generation.</button>
 <script>
+    let finalGrid = document.querySelector("#grid");
     let widthPole = 20;
     let heightPole = 10;
     let currentPole = new Array(heightPole);
+    let iterationNumber = 0;
     for (let i = 0; i < heightPole; i++){
         currentPole[i] = new Array(widthPole);
     }
-    function fillCurrentPole(pole) {
+    function fillCurrentPole() {
         for (let j = 0; j < widthPole; j++){
             for (let i = 0; i < heightPole; i++){
-                pole[i][j] = (Math.random() < 0.5) ? 0 : 1;
+                currentPole[i][j] = (Math.random() < 0.8) ? 0 : 1;
             }
         }
     }
-    fillCurrentPole(currentPole);
+    fillCurrentPole();
     function printPole(pole) {
+        console.log("\nIteration number is " + iterationNumber);
         for (let i = 0; i < heightPole; i++){
             let strTemp = "";
             for (let j = 0; j < widthPole; j++){
@@ -119,20 +122,33 @@
             console.log(strTemp);
         }
     }
-    printPole(currentPole);
-    function checkCell(testNumber) {
-        return (testNumber !== undefined) ? testNumber : 0;
-    }
     function countNeig(pole, iPole, jPole) {
-        return checkCell(pole[iPole - 1][jPole - 1]) +
-                        checkCell(pole[iPole - 1][jPole + 0]) +
-                            checkCell(pole[iPole - 1][jPole + 1]) +
-                    checkCell(pole[iPole + 0][jPole - 1]) +
-                        0 +
-                            checkCell(pole[iPole + 0][jPole + 1]) +
-                    checkCell(pole[iPole + 1][jPole - 1]) +
-                        checkCell(pole[iPole + 1][jPole + 0]) +
-                            checkCell(pole[iPole + 1][jPole + 1]);
+        let result = 0;
+        if (iPole - 1 >= 0 && jPole - 1 >= 0){
+            result += pole[iPole - 1][jPole - 1];
+        }
+        if (iPole - 1 >= 0 && jPole + 0 >= 0){
+            result += pole[iPole - 1][jPole + 0];
+        }
+        if (iPole - 1 >= 0 && jPole + 1 < widthPole){
+            result += pole[iPole - 1][jPole + 1];
+        }
+        if (iPole + 0 >= 0 && jPole - 1 >= 0){
+            result += pole[iPole + 0][jPole - 1];
+        }
+        if (iPole + 0 >= 0 && jPole + 1 < widthPole){
+            result += pole[iPole + 0][jPole + 1];
+        }
+        if (iPole + 1 < heightPole && jPole - 1 >= 0){
+            result += pole[iPole + 1][jPole - 1];
+        }
+        if (iPole + 1 < heightPole && jPole + 0 >= 0){
+            result += pole[iPole + 1][jPole + 0];
+        }
+        if (iPole + 1 < heightPole && jPole + 1 < widthPole){
+            result += pole[iPole + 1][jPole + 1];
+        }
+        return result;
     }
     function nextStep(pole) {
         for (let i = 0; i < heightPole; i++){
@@ -146,11 +162,36 @@
                 }
             }
         }
+        iterationNumber++;
     }
-    nextStep(currentPole);
-    printPole(currentPole);
-    //let testArray = [3];
-    //console.log(testArray, testArray[-1] === undefined);
+    function createGrid(pole) {
+        let grid = document.createElement("div");
+        for (let i = 0; i < heightPole; i++){
+            let rowDiv = document.createElement("div");
+            for (let j = 0; j < widthPole; j++){
+                let checkBoxTemp = document.createElement("input");
+                checkBoxTemp.type = "checkbox";
+                if (pole[i][j] === 1){
+                    checkBoxTemp.checked = true;
+                } else {
+                    checkBoxTemp.checked = false;
+                }
+                rowDiv.appendChild(checkBoxTemp);
+            }
+            grid.appendChild(rowDiv);
+        }
+        return grid;
+    }
+    function nextFillGrid(grid) {
+        nextStep(currentPole);
+        finalGrid.removeChild(finalViewGrid);
+        finalViewGrid = createGrid(currentPole);
+        finalGrid.appendChild(finalViewGrid);
+        //printPole(currentPole);
+    }
+    let finalViewGrid = createGrid(currentPole);
+    finalGrid.appendChild(finalViewGrid);
+
 </script>
 
 
