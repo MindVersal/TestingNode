@@ -91,46 +91,66 @@
     });
 
 </script>
-
+<br/>
+<br/>
 <div id="grid"></div>
 <button id="next">Next generation.</button>
 <script>
     let widthPole = 20;
     let heightPole = 10;
-    let currentPole = [][];
+    let currentPole = new Array(heightPole);
+    for (let i = 0; i < heightPole; i++){
+        currentPole[i] = new Array(widthPole);
+    }
     function fillCurrentPole(pole) {
-        for (let j = 0; j < heightPole; j++){
-            let rowPole = [];
-            for (let i = 0; i < widthPole; i++){
-                rowPole.push((Math.random() < 0.5) ? 0 : 1);
+        for (let j = 0; j < widthPole; j++){
+            for (let i = 0; i < heightPole; i++){
+                pole[i][j] = (Math.random() < 0.5) ? 0 : 1;
             }
-            pole.push(rowPole);
         }
     }
     fillCurrentPole(currentPole);
     function printPole(pole) {
-        for (let j = 0; j < heightPole; j++){
-            console.log(pole[j].join(" "));
+        for (let i = 0; i < heightPole; i++){
+            let strTemp = "";
+            for (let j = 0; j < widthPole; j++){
+                strTemp += pole[i][j] + " ";
+            }
+            console.log(strTemp);
         }
     }
     printPole(currentPole);
-    function countNeig(rowPole, colPole) {
-
+    function checkCell(testNumber) {
+        return (testNumber !== undefined) ? testNumber : 0;
+    }
+    function countNeig(pole, iPole, jPole) {
+        return checkCell(pole[iPole - 1][jPole - 1]) +
+                        checkCell(pole[iPole - 1][jPole + 0]) +
+                            checkCell(pole[iPole - 1][jPole + 1]) +
+                    checkCell(pole[iPole + 0][jPole - 1]) +
+                        0 +
+                            checkCell(pole[iPole + 0][jPole + 1]) +
+                    checkCell(pole[iPole + 1][jPole - 1]) +
+                        checkCell(pole[iPole + 1][jPole + 0]) +
+                            checkCell(pole[iPole + 1][jPole + 1]);
     }
     function nextStep(pole) {
-        let newPole = [];
-        for (let j = 0; j < heightPole; j++){
-            let rowPole = [];
-            for (let i = 0; i < widthPole; i++){
-
-
+        for (let i = 0; i < heightPole; i++){
+            for (let j = 0; j < widthPole; j++){
+                let cellTest = countNeig(pole, i , j);
+                if (cellTest < 2 || cellTest > 3){
+                    pole[i][j] = 0;
+                }
+                if (cellTest === 3){
+                    pole[i][j] = 1;
+                }
             }
-            newPole.push(rowPole);
         }
-        return newPole;
     }
-    let testArray = [1, 2, 3];
-    console.log(testArray, testArray[-1] === undefined);
+    nextStep(currentPole);
+    printPole(currentPole);
+    //let testArray = [3];
+    //console.log(testArray, testArray[-1] === undefined);
 </script>
 
 
