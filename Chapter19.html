@@ -59,8 +59,6 @@
     function runCode() {
         let runFunct = new Function("", codeNotes["test"]);
         output.textContent = runFunct();
-        console.log(codeNotes["test"]);
-        console.log(runFunct());
     }
     let codeNotes = {"test": "return \"hi\";"};
     input.addEventListener("change", function () {
@@ -68,8 +66,31 @@
     });
 </script>
 
+<input type="text" id="field">
+<div id="suggestions" style="cursor: pointer"></div>
+<script>
+    let terms = [];
+    for (let name in window){
+        terms.push(name);
+    }
+    let inputTerms = document.querySelector("#field");
+    let outputTerms = document.querySelector("#suggestions");
+    let inputText = "";
+    inputTerms.addEventListener("input", function () {
+        outputTerms.textContent = "";
+        inputText = inputTerms.value;
+        let tempTerms = [];
+        terms.forEach(function (element) {
+            if (inputText !== "" && element.indexOf(inputText) === 0){
+                tempTerms.push(element);
+            }
+        });
+        tempTerms.forEach(function (element) {
+            outputTerms.textContent += " |>" + element + "<| ";
+        });
+    });
 
-
+</script>
 
 
 
