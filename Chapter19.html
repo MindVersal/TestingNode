@@ -50,9 +50,23 @@
 
 </script>
 
-
-
-
+<textarea id="code">return "hi";</textarea>
+<button onclick="runCode()" id="button">Run</button>
+<pre id="output"></pre>
+<script>
+    let input = document.querySelector("#code");
+    let output = document.querySelector("#output");
+    function runCode() {
+        let runFunct = new Function("", codeNotes["test"]);
+        output.textContent = runFunct();
+        console.log(codeNotes["test"]);
+        console.log(runFunct());
+    }
+    let codeNotes = {"test": "return \"hi\";"};
+    input.addEventListener("change", function () {
+        codeNotes["test"] = input.value;
+    });
+</script>
 
 
 
