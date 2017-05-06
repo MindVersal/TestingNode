@@ -5,6 +5,71 @@
     <title>Chapter 19.</title>
 </head>
 <body>
+Заметки: <select id="list"></select>
+<button onclick="addNote()">New note</button>
+<textarea id="currentNote" style="width: 100%; height: 10em">
+</textarea>
+<script>
+    let list = document.querySelector("#list");
+    function addToList(name) {
+        let option = document.createElement("option");
+        option.textContent = name;
+        list.appendChild(option);
+    }
+    let notes = JSON.parse(localStorage.getItem("notes")) || {"what buy": ""};
+    for (let name in notes){
+        if (notes.hasOwnProperty(name)){
+            addToList(name);
+        }
+    }
+    function saveToStorage() {
+        localStorage.setItem("notes", JSON.stringify(notes));
+    }
+    let current = document.querySelector("#currentNote");
+    current.value = notes[list.value];
+    list.addEventListener("change", function () {
+        current.value = notes[list.value];
+    });
+    current.addEventListener("change", function () {
+        notes[list.value] = current.value;
+        saveToStorage();
+    });
+    function addNote() {
+        let name = prompt("Name note", "");
+        if (!name){
+            return;
+        }
+        if (!notes.hasOwnProperty(name)){
+            notes[name] = "";
+            addToList(name);
+            saveToStorage();
+        }
+        list.value = name;
+        current.value = notes[name];
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
