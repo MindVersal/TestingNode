@@ -201,10 +201,10 @@
         document.body.appendChild(tempRect);
         trackDrag(function (event) {
             currentPos = relativePos(event, cx.canvas);
-            tempRect.style.left = leftTopPos.x + "px";
-            tempRect.style.top = leftTopPos.y + "px";
-            tempRect.style.width = currentPos.x - leftTopPos.x + "px";
-            tempRect.style.height = currentPos.y - leftTopPos.y + "px";
+            tempRect.style.left = Math.min(leftTopPos.x, currentPos.x) + "px";
+            tempRect.style.top = Math.min(leftTopPos.y, currentPos.y) + "px";
+            tempRect.style.width = Math.max(leftTopPos.x, currentPos.x - leftTopPos.x) + "px";
+            tempRect.style.height = Math.max(leftTopPos.y, currentPos.y - leftTopPos.y) + "px";
         }, function () {
             document.body.removeChild(tempRect);
             cx.beginPath();
