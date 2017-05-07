@@ -157,6 +157,41 @@
         });
         return form;
     };
+    tools.Text = function (event, cx) {
+        let text = prompt("Text: ", "");
+        if (text){
+            let pos = relativePos(event, cx.canvas);
+            cx.font = Math.max(7, cx.lineWidth) + "px sans-serif";
+            cx.fillText(text, pos.x, pos.y);
+        }
+    };
+    tools.Spray = function (event, cx) {
+        let radius = cx.lineWidth / 2;
+        let area = radius * radius * Math.PI;
+        let dotsPerTick = Math.ceil(area / 30);
+        let currentPos = relativePos(event, cx.canvas);
+        let spray = setInterval(function () {
+            for (let i = 0;  i < dotsPerTick; i++){
+                let offset = randomPointInRadius(radius);
+                cx.fillRect(currentPos.x + offset.x,
+                            currentPos.y + offset.y, 1, 1);
+            }
+        }, 25);
+        trackDrag(function (event) {
+            currentPos = relativePos(event, cx.canvas);
+        }, function () {
+            clearInterval(spray);
+        })
+    };
+    function randomPointInRadius(radius) {
+        for (;;){
+            let x = Math.random() * 2 - 1;
+            let y = Math.random() * 2 - 1;
+            if (x * x + y * y <= 1){
+                return {x: x * radius, y: y * radius};
+            }
+        }
+    }
 
 </script>
 
