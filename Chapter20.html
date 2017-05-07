@@ -49,14 +49,41 @@
             }
         });
         return elt("span", null, "Tool: ", select);
-    }
+    };
     function relativePos(event, element) {
         let rect = element.getBoundingClientRect();
         return {x: Math.floor(event.clientX - rect.left),
                 y: Math.floor(event.clientY - rect.top)};
     }
-    
-    
+    function trackDrag(onMove, onEnd) {
+        function end(event) {
+            removeEventListener("mousemove", onMove);
+            removeEventListener("mouseup", end);
+            if (onEnd){
+                onEnd(event);
+            }
+            addEventListener("mousemove", onMove);
+            addEventListener("mouseup", end);
+        }
+    }
+    tools.Line = function (event, cx, onEnd) {
+        cx.lineCap = "round";
+        let pos = relativePos(event, cx.canvas);
+        trackDrag(function (event) {
+            cx.beginPath();
+            cx.moveTo(pos.x, pos.y);
+            pos = relativePos(event, cx.canvas);
+            cx.lineTo(pos.x, pos.y);
+            cx.stroke();
+        }, onEnd);
+    };
+    tools.Erase = function (event, cx) {
+        cx.globalCompositeOperation = "destination-out";
+        tools.Line(event, cx, function () {
+            cx.globalCompositeOperation = "source-over";
+        });
+    };
+
 </script>
 
 
