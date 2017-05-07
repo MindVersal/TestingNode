@@ -36,6 +36,27 @@
         parent.appendChild(elt("div", null, panel, toolbar));
 
     }
+    let tools = Object.create(null);
+    controls.tool = function (cx) {
+        let select = elt("select");
+        for (let name in tools){
+            select.appendChild(elt("option", null, name));
+        }
+        cx.canvas.addEventListener("mousedown", function (event) {
+            if (event.which === 1){
+                tools[select.value](event, cx);
+                event.preventDefault();
+            }
+        });
+        return elt("span", null, "Tool: ", select);
+    }
+    function relativePos(event, element) {
+        let rect = element.getBoundingClientRect();
+        return {x: Math.floor(event.clientX - rect.left),
+                y: Math.floor(event.clientY - rect.top)};
+    }
+    
+    
 </script>
 
 
