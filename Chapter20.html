@@ -262,12 +262,11 @@
             let currentPos = relativePos(event, cx.canvas);
             let currentColor = pixelAt(cx, currentPos.x, currentPos.y);
             if (currentColor){
-                fillRecurse(cx, currentPos.x, currentPos.y, currentColor,
-                    {rgb: "rgb(0, 255, 255)", hex: "#00ffff", alpha: 255});
+                fillRecurse(cx, currentPos.x, currentPos.y, currentColor);
             }
         })
     };
-    function fillRecurse(cx, x, y, currentColor, color) {
+    function fillRecurse(cx, x, y, currentColor) {
         if (x < 1 || y < 1 || x >= cx.canvas.width - 1 || y >= cx.canvas.height - 1 ){
             return;
         }
@@ -275,14 +274,11 @@
         if (tempCol && (tempCol.hex !== currentColor.hex || tempCol.alpha > 0)){
             return;
         }
-        let tempColor = cx.fillStyle;
-        cx.fillStyle = color.rgb;
         cx.fillRect(x, y, 1, 1);
-        cx.fillStyle = tempColor;
-        fillRecurse(cx, x - 1, y, currentColor, color);
-        fillRecurse(cx, x, y - 1, currentColor, color);
-        fillRecurse(cx, x + 1, y, currentColor, color);
-        fillRecurse(cx, x, y + 1, currentColor, color);
+        fillRecurse(cx, x - 1, y, currentColor);
+        fillRecurse(cx, x, y - 1, currentColor);
+        fillRecurse(cx, x + 1, y, currentColor);
+        fillRecurse(cx, x, y + 1, currentColor);
     }
 
     createPaint(document.body);
