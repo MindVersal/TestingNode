@@ -276,9 +276,9 @@
         }
         cx.fillRect(x, y, 1, 1);
         fillRecurse(cx, x - 1, y, currentColor);
+        fillRecurse(cx, x, y + 1, currentColor);
         fillRecurse(cx, x, y - 1, currentColor);
         fillRecurse(cx, x + 1, y, currentColor);
-        fillRecurse(cx, x, y + 1, currentColor);
     }
 
     createPaint(document.body);
