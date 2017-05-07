@@ -192,6 +192,19 @@
             }
         }
     }
+    tools.Rectangle = function (event, cx) {
+        let leftTopPos = relativePos(event, cx.canvas);
+        let currentPos = leftTopPos;
+        trackDrag(function (event) {
+            currentPos = relativePos(event, cx.canvas);
+        }, function () {
+            cx.beginPath();
+            cx.strokeRect(leftTopPos.x, leftTopPos.y,
+                            currentPos.x - leftTopPos.x,
+                            currentPos.y - leftTopPos.y);
+            cx.stroke();
+        });
+    };
 
     createPaint(document.body);
 </script>
