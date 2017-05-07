@@ -235,7 +235,8 @@
                     (tempHex === 1) ? "0" + tempHex : "00";
             }
             return {rgb: "rgb(" + data.data[0] + ", " + data.data[1] + ", " + data.data[2] + ")",
-                    hex: hexColor};
+                    hex: hexColor,
+                    alpha: data.data[3]};
         } else {
             return null;
         }
@@ -255,9 +256,27 @@
         });
 
     };
+    tools["Flood fill"] = function (event, cx) {
+        trackDrag(null, function (event) {
+            let currentPos = relativePos(event, cx.canvas);
+            let currentColor = pixelAt(cx, currentPos.x, currentPos.y);
+            fillRecurse(cx, currentPos.x, currentPos.y, currentColor);
+        })
+    };
+    function fillRecurse(cx, x, y, color) {
+        if (x < 0 || y < 0 ||
+                x >= cx.canvas.height - 1 || y >= cx.canvas.width - 1 ||
+                pixelAt(cx, x, y) === color){
+            return;
+        }
+        let tempColor = cx.fillStyle;
+        cx.fillStyle = color.rgb;
+        cx.fillRect(x, y, 1, 1);
+        cx.fillStyle = tempColor;
+        fillRecurse(cx, x - 1, y, color);
+    }
 
     createPaint(document.body);
-
 
 </script>
 
