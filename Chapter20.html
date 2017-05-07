@@ -62,9 +62,9 @@
             if (onEnd){
                 onEnd(event);
             }
-            addEventListener("mousemove", onMove);
-            addEventListener("mouseup", end);
         }
+        addEventListener("mousemove", onMove);
+        addEventListener("mouseup", end);
     }
     tools.Line = function (event, cx, onEnd) {
         cx.lineCap = "round";
@@ -193,6 +193,7 @@
         }
     }
 
+    createPaint(document.body);
 </script>
 
 
