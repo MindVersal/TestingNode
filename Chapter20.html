@@ -84,7 +84,7 @@
         });
     };
     controls.color = function (cx) {
-        let input = elt("input", {type: "color"});
+        let input = elt("input", {type: "color", id: "colorcontrol"});
         input.addEventListener("change", function () {
             cx.fillStyle = input.value;
             cx.strokeStyle = input.value;
@@ -215,9 +215,50 @@
 
         });
     };
+    function pixelAt(cx, x, y) {
+        let data = null;
+        try {
+            data = cx.getImageData(x, y, 1, 1);
+        } catch (e){
+            if (e instanceof SecurityError){
+                console.log("javascript:alert(" +
+                    JSON.stringify("Can't save: " + e.toString()) + ")");
+            } else {
+                throw e;
+            }
+        }
+        if (data){
+            let hexColor = "#";
+            for (let i = 0; i < 3; i++){
+                let tempHex = data.data[i].toString(16);
+                hexColor += (tempHex.length === 2) ? tempHex :
+                    (tempHex === 1) ? "0" + tempHex : "00";
+            }
+            return {rgb: "rgb(" + data.data[0] + ", " + data.data[1] + ", " + data.data[2] + ")",
+                    hex: hexColor};
+        } else {
+            return null;
+        }
+    }
 
+    tools["Pick color"] = function (event, cx) {
+
+        trackDrag(null, function (event) {
+            let currentPos = relativePos(event, cx.canvas);
+            let tempColor = pixelAt(cx, currentPos.x, currentPos.y);
+            if (tempColor){
+                let colorControl = document.querySelector("#colorcontrol");
+                colorControl.value = tempColor.hex;
+                cx.fillStyle = tempColor.rgb;
+                cx.strokeStyle = tempColor.rgb;
+            }
+        });
+
+    };
 
     createPaint(document.body);
+
+
 </script>
 
 
