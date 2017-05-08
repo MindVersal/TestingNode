@@ -28,14 +28,22 @@ fs.readFile("mountains.js", "utf8",function (error, text) {
     }
     console.log("In file: ", text);
 });
+fs.readFile("garble.js", function (error, buffer) {
+    if (error) {
+        throw error;
+    }
+    console.log("\nIn file: ", buffer.length, " bytes.",
+                "\nAnd first byte is: ", buffer[0]);
+});
 fs.writeFile("example/graffiti.txt", "Hello from Node.", function (error) {
     if (error){
-        console.log("Sorry, but will have error: ", error);
+        console.log("\nSorry, but will have error: ", error);
     } else {
-        console.log("Writing in finish.");
+        console.log("\nWriting in finish.");
     }
 });
-
+console.log();
+console.log("Testing HTTP.");
 
 console.log();
 console.log("THE END.");
