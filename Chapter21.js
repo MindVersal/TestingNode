@@ -44,6 +44,14 @@ fs.writeFile("example/graffiti.txt", "Hello from Node.", function (error) {
 });
 console.log();
 console.log("Testing HTTP.");
+let http = require("http");
+let server = http.createServer(function (request, response) {
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write("<h1>Hello!</h1><p>You request: ' " +
+                request.url + "'</p>");
+    response.end();
+});
+server.listen(8000);
 
 console.log();
 console.log("THE END.");
