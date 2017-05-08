@@ -28,6 +28,14 @@ fs.readFile("mountains.js", "utf8",function (error, text) {
     }
     console.log("In file: ", text);
 });
+fs.writeFile("example/graffiti.txt", "Hello from Node.", function (error) {
+    if (error){
+        console.log("Sorry, but will have error: ", error);
+    } else {
+        console.log("Writing in finish.");
+    }
+});
+
 
 console.log();
 console.log("THE END.");
