@@ -172,8 +172,49 @@ methods.MKCOL = function (path, request) {
         }
     });
 };
-
-
+// let request = http.request({
+//     hostname: "localhost",
+//     port: 8000,
+//     method: "POST"
+// }, function (response) {
+//     response.on("data", function (chunk) {
+//         process.stdout.write(chunk.toString());
+//     });
+// });
+// request.end("Hello server.");
+function readStreamAsString(stream, callback) {
+    let content = "";
+    stream.on("data", function (chunk) {
+        content += chunk;
+    });
+    stream.on("end", function () {
+        callback(null, content);
+    });
+    stream.on("error", function (error) {
+        callback(error);
+    });
+}
+console.log("\nTesting any content-type:");
+["text/plain", "text/html", "application/json",
+        "application/rainbows+unicorns"].forEach(function (type) {
+    http.request({
+        hostname: "eloquentjavascript.net",
+        path: "/author",
+        headers: {Accept: type}
+    }, function (response) {
+        if (response.statusCode !== 200){
+            console.error("Request for " + type + " failed: " +
+                response.statusMessage);
+            return;
+        }
+        readStreamAsString(response, function (error, content) {
+            if (error){
+                throw error;
+            }
+            console.log("Type" + type + ": " + content);
+        });
+    }).end();
+});
 
 console.log();
 console.log("THE END.");
