@@ -123,8 +123,28 @@ methods.GET = function (path, respond) {
         }
     });
 };
-
-
+methods.DELETE = function (path, respond) {
+    fs.stat(path, function (error, stats) {
+        if (error && error.code === "ENOENT"){
+            respond(204);
+        } else if (error){
+            respond(500, error.toString());
+        } else if (stats.isDirectory()){
+            fs.rmdir(path, respondErrorOrNothing(respond));
+        } else {
+            fs.unlink(path, respondErrorOrNothing(respond));
+        }
+    })
+};
+function respondErrorOrNothing(respond) {
+    return function (error) {
+        if (error){
+            respond(500, error.toString());
+        } else {
+            respond(204);
+        }
+    };
+}
 
 
 console.log();
