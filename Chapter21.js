@@ -82,80 +82,95 @@ let http = require("http");
 // request.end("Hello server.");
 let methods = Object.create(null);
 http.createServer(function (request, response) {
-    function respond(code, body, type) {
-        if (!type) {
-            type = "text/plain";
-        }
-        response.writeHead(code, {"Content-Type": type});
-        if (body && body.pipe){
-            body.pipe(response);
+    respondTo(request).then(function (data) {
+        if (data.body && data.body.pipe){
+            data.body.pipe(response);
         } else {
-            response.end(body);
+            response.end(data.body);
         }
-    }
-    if (request.method in methods){
-        methods[request.method](urlToPath(request.url), respond, request);
-    } else {
-        respond(405, "Method " + request.method + " not allowed.");
-    }
+    }, function (error) {
+        response.writeHead(500);
+        response.end(error.toString());
+        console.log("Response failed: ", error.stack);
+    });
 }).listen(8000);
+function respondTo(request) {
+    if (request.method in methods){
+        return methods[request.method](urlToPath(request.url), request);
+    } else {
+        return Promise.resolve({code: 405,
+                body: "Method " + request.method + " not allowed."});
+    }
+}
 function urlToPath(url) {
     let path = require("url").parse(url).pathname;
-    return "." + decodeURIComponent(path);
+    let decoded = decodeURIComponent(path);
+    return "." + decoded.replace(/(\/|\\)\.\.(\/\|\\|$)/g, "/");
 }
-methods.GET = function (path, respond) {
-    fs.stat(path, function (error, stats) {
-        if (error && error.code === "ENOENT"){
-            respond(404, "File not found");
-        } else if (error){
-            respond(500, error.toString());
-        } else if (stats.isDirectory()){
-            fs.readdir(path, function (error, files) {
-                if (error){
-                    respond(500, error.toString());
-                } else {
-                    respond(200, files.join("\n"));
-                }
-            });
+let fsp = {};
+["stat", "readdir", "rmdir", "unlink", "mkdir"].forEach(function (method) {
+    fps[method] = Promise.denodeify(fs[method]);
+});
+function inspectPath(path) {
+    return fsp.stat(path).then(null, function (error) {
+        if (error.code === "ENOENT") {
+            return null;
         } else {
-            respond(200, fs.createReadStream(path),
-                require("mime").lookup(path));
-        }
-    });
-};
-methods.DELETE = function (path, respond) {
-    fs.stat(path, function (error, stats) {
-        if (error && error.code === "ENOENT"){
-            respond(204);
-        } else if (error){
-            respond(500, error.toString());
-        } else if (stats.isDirectory()){
-            fs.rmdir(path, respondErrorOrNothing(respond));
-        } else {
-            fs.unlink(path, respondErrorOrNothing(respond));
+            throw error;
         }
     })
-};
-function respondErrorOrNothing(respond) {
-    return function (error) {
-        if (error){
-            respond(500, error.toString());
-        } else {
-            respond(204);
-        }
-    };
 }
-methods.PUT = function (path, respond, request) {
-    let outStream = fs.createWriteStream(path);
-    outStream.on("error", function (error) {
-        respond(500, error.toString());
+methods.GET = function (path) {
+    return inspectPath(path).then(function (stats) {
+        if (!stats){
+            return {code: 404, body: "File not found."};
+        } else if (stats.isDirectory()){
+            return fsp.readdir(path).then(function (files) {
+                return {code: 200, body: files.join("\n")};
+            });
+        } else {
+            return {code: 200,
+                    type: require("mime").lookup(path),
+                    body: fs.createReadStream(path)};
+        }
     });
-    outStream.on("finish", function () {
-        respond(204);
-    });
-    request.pipe(outStream);
 };
-
+let noContent = {code: 204};
+function returnNoContent() {
+    return noContent;
+}
+methods.DELETE = function (path) {
+    return inspectPath(path).then(function (stats) {
+        if (!stats){
+            return noContent;
+        } else if (stats.isDirectory()){
+            return fsp.rmdir(path).then(returnNoContent);
+        } else {
+            return fsp.unlink(path).then(returnNoContent);
+        }
+    });
+};
+methods.PUT = function (path, request) {
+    return new Promise(function (success, failure) {
+        let outStream = fs.createWriteStream(path);
+        outStream.on("error", failure);
+        outStream.on("finish", success.bind(null, noContent));
+        request.pipe(outStream);
+    });
+};
+methods.MKCOL = function (path, request) {
+    return inspectPath(path).then(function (stats) {
+        if (!stats){
+            return fsp.mkdir(path).then(returnNoContent);
+        }
+        if (stats.isDirectory()){
+            return noContent;
+        } else {
+            return {code: 400, body: "File exists."};
+        }
+    });
+};
+let Promise = require("promise");
 
 
 
