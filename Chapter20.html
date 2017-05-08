@@ -262,7 +262,8 @@
             let currentPos = relativePos(event, cx.canvas);
             let currentColor = pixelAt(cx, currentPos.x, currentPos.y);
             if (currentColor){
-                fillRecurse(cx, currentPos.x, currentPos.y, currentColor);
+                //fillRecurse(cx, currentPos.x, currentPos.y, currentColor);
+                fillIterat(cx, currentPos.x, currentPos.y, currentColor);
             }
         })
     };
@@ -271,7 +272,7 @@
             return;
         }
         let tempCol = pixelAt(cx, x, y);
-        if (tempCol && (tempCol.hex !== currentColor.hex || tempCol.alpha > 0)){
+        if (tempCol && tempCol.alpha > 250 ){//(tempCol.hex !== currentColor.hex || tempCol.alpha > 0)){
             return;
         }
         cx.fillRect(x, y, 1, 1);
@@ -279,6 +280,42 @@
         fillRecurse(cx, x, y + 1, currentColor);
         fillRecurse(cx, x, y - 1, currentColor);
         fillRecurse(cx, x + 1, y, currentColor);
+    }
+    function fillIterat(cx, x, y, currentColor) {
+        let stackTemp = [];
+        let alphaTop = 200;
+        stackTemp.push({pointX: x, pointY: y});
+        while (stackTemp.length){
+            let elemTemp = stackTemp.pop();
+            cx.fillRect(elemTemp.pointX, elemTemp.pointY, 1, 1);
+
+            let tempCol = null;
+            if (elemTemp.pointX + 1 < cx.canvas.width) {
+                tempCol = pixelAt(cx, elemTemp.pointX + 1, elemTemp.pointY);
+                if (tempCol && tempCol.alpha < alphaTop) {
+                    stackTemp.push({pointX: elemTemp.pointX + 1, pointY: elemTemp.pointY});
+                }
+            }
+            if (elemTemp.pointX - 1 > 0) {
+                tempCol = pixelAt(cx, elemTemp.pointX - 1, elemTemp.pointY);
+                if (tempCol && tempCol.alpha < alphaTop) {
+                    stackTemp.push({pointX: elemTemp.pointX - 1, pointY: elemTemp.pointY});
+                }
+            }
+            if (elemTemp.pointY + 1 < cx.canvas.height) {
+                tempCol = pixelAt(cx, elemTemp.pointX, elemTemp.pointY + 1);
+                if (tempCol && tempCol.alpha < alphaTop) {
+                    stackTemp.push({pointX: elemTemp.pointX, pointY: elemTemp.pointY + 1});
+                }
+            }
+            if (elemTemp.pointY - 1 > 0) {
+                tempCol = pixelAt(cx, elemTemp.pointX, elemTemp.pointY - 1);
+                if (tempCol && tempCol.alpha < alphaTop) {
+                    stackTemp.push({pointX: elemTemp.pointX, pointY: elemTemp.pointY - 1});
+                }
+            }
+        }
+
     }
 
     createPaint(document.body);
