@@ -45,13 +45,32 @@ fs.writeFile("example/graffiti.txt", "Hello from Node.", function (error) {
 console.log();
 console.log("Testing HTTP.");
 let http = require("http");
-let server = http.createServer(function (request, response) {
-    response.writeHead(200, {"Content-Type": "text/html"});
-    response.write("<h1>Hello!</h1><p>You request: ' " +
-                request.url + "'</p>");
-    response.end();
+// let server = http.createServer(function (request, response) {
+//     response.writeHead(200, {"Content-Type": "text/html"});
+//     response.write("<h1>Hello!</h1><p>You request: ' " +
+//                 request.url + "'</p>");
+//     response.end();
+// });
+// server.listen(8000);
+let request = http.request({
+    hostname: "eloquentjavascript.net",
+    path: "/20_node.html",
+    method: "GET",
+    headers: {Accept: "text/html"}
+}, function (response) {
+    console.log("Service answer with code: ", response.statusCode);
 });
-server.listen(8000);
+request.end();
+
+
+
+
+
+
+
+
+
+
 
 console.log();
 console.log("THE END.");
