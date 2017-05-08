@@ -262,26 +262,26 @@
             let currentPos = relativePos(event, cx.canvas);
             let currentColor = pixelAt(cx, currentPos.x, currentPos.y);
             if (currentColor){
-                //fillRecurse(cx, currentPos.x, currentPos.y, currentColor);
-                fillIterat(cx, currentPos.x, currentPos.y, currentColor);
+                //fillRecurse(cx, currentPos.x, currentPos.y);
+                fillIterat(cx, currentPos.x, currentPos.y);
             }
         })
     };
-    function fillRecurse(cx, x, y, currentColor) {
+    function fillRecurse(cx, x, y) {
         if (x < 1 || y < 1 || x >= cx.canvas.width - 1 || y >= cx.canvas.height - 1 ){
             return;
         }
         let tempCol = pixelAt(cx, x, y);
-        if (tempCol && tempCol.alpha > 250 ){//(tempCol.hex !== currentColor.hex || tempCol.alpha > 0)){
+        if (tempCol && tempCol.alpha > 250 ){
             return;
         }
         cx.fillRect(x, y, 1, 1);
-        fillRecurse(cx, x - 1, y, currentColor);
-        fillRecurse(cx, x, y + 1, currentColor);
-        fillRecurse(cx, x, y - 1, currentColor);
-        fillRecurse(cx, x + 1, y, currentColor);
+        fillRecurse(cx, x - 1, y);
+        fillRecurse(cx, x, y + 1);
+        fillRecurse(cx, x, y - 1);
+        fillRecurse(cx, x + 1, y);
     }
-    function fillIterat(cx, x, y, currentColor) {
+    function fillIterat(cx, x, y) {
         let stackTemp = [];
         let alphaTop = 200;
         let dataImage = cx.getImageData(0, 0, cx.canvas.width, cx.canvas.height);
