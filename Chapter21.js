@@ -80,6 +80,8 @@ let http = require("http");
 //     });
 // });
 // request.end("Hello server.");
+let Promise = require("promise");
+
 let methods = Object.create(null);
 http.createServer(function (request, response) {
     respondTo(request).then(function (data) {
@@ -109,7 +111,7 @@ function urlToPath(url) {
 }
 let fsp = {};
 ["stat", "readdir", "rmdir", "unlink", "mkdir"].forEach(function (method) {
-    fps[method] = Promise.denodeify(fs[method]);
+    fsp[method] = Promise.denodeify(fs[method]);
 });
 function inspectPath(path) {
     return fsp.stat(path).then(null, function (error) {
@@ -170,7 +172,6 @@ methods.MKCOL = function (path, request) {
         }
     });
 };
-let Promise = require("promise");
 
 
 
