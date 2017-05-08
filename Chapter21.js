@@ -13,14 +13,14 @@ if (process.argv[2]) {
 console.log("\nArgument before: " + argument +
             "\nArgument after: " + garble(argument));
 console.log("\nTest Figlet.");
-// let figlet = require("figlet");
-// figlet.text("Hello world!", function (error, data) {
-//     if (error){
-//         console.error(error);
-//     } else {
-//         console.log(data);
-//     }
-// });
+let figlet = require("figlet");
+figlet.text("Hello world!", function (error, data) {
+    if (error){
+        console.error(error);
+    } else {
+        console.log(data);
+    }
+});
 let fs = require("fs");
 fs.readFile("mountains.js", "utf8",function (error, text) {
     if (error){
@@ -145,7 +145,16 @@ function respondErrorOrNothing(respond) {
         }
     };
 }
-
+methods.PUT = function (path, respond, request) {
+    let outStream = fs.createWriteStream(path);
+    outStream.on("error", function (error) {
+        respond(500, error.toString());
+    });
+    outStream.on("finish", function () {
+        respond(204);
+    });
+    request.pipe(outStream);
+};
 
 console.log();
 console.log("THE END.");
