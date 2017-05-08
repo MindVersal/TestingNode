@@ -284,38 +284,56 @@
     function fillIterat(cx, x, y, currentColor) {
         let stackTemp = [];
         let alphaTop = 200;
+        let dataImage = cx.getImageData(0, 0, cx.canvas.width - 1, cx.canvas.height - 1);
         stackTemp.push({pointX: x, pointY: y});
         while (stackTemp.length){
             let elemTemp = stackTemp.pop();
             cx.fillRect(elemTemp.pointX, elemTemp.pointY, 1, 1);
+            setToDataColor(cx, dataImage, elemTemp.pointX, elemTemp.pointY);
 
             let tempCol = null;
             if (elemTemp.pointX + 1 < cx.canvas.width) {
-                tempCol = pixelAt(cx, elemTemp.pointX + 1, elemTemp.pointY);
+                tempCol = getFromDataColor(cx, dataImage, elemTemp.pointX + 1, elemTemp.pointY);
                 if (tempCol && tempCol.alpha < alphaTop) {
                     stackTemp.push({pointX: elemTemp.pointX + 1, pointY: elemTemp.pointY});
                 }
             }
             if (elemTemp.pointX - 1 > 0) {
-                tempCol = pixelAt(cx, elemTemp.pointX - 1, elemTemp.pointY);
+                tempCol = getFromDataColor(cx, dataImage, elemTemp.pointX - 1, elemTemp.pointY);
                 if (tempCol && tempCol.alpha < alphaTop) {
                     stackTemp.push({pointX: elemTemp.pointX - 1, pointY: elemTemp.pointY});
                 }
             }
             if (elemTemp.pointY + 1 < cx.canvas.height) {
-                tempCol = pixelAt(cx, elemTemp.pointX, elemTemp.pointY + 1);
+                tempCol = getFromDataColor(cx, dataImage, elemTemp.pointX, elemTemp.pointY + 1);
                 if (tempCol && tempCol.alpha < alphaTop) {
                     stackTemp.push({pointX: elemTemp.pointX, pointY: elemTemp.pointY + 1});
                 }
             }
             if (elemTemp.pointY - 1 > 0) {
-                tempCol = pixelAt(cx, elemTemp.pointX, elemTemp.pointY - 1);
+                tempCol = getFromDataColor(cx, dataImage, elemTemp.pointX, elemTemp.pointY - 1);
                 if (tempCol && tempCol.alpha < alphaTop) {
                     stackTemp.push({pointX: elemTemp.pointX, pointY: elemTemp.pointY - 1});
                 }
             }
         }
 
+    }
+    function getFromDataColor(cx, data, x, y) {
+        let pointData = (x + y * cx.canvas.width) * 4;
+        let hexColor = "#";
+        for (let i = 0; i < 3; i++){
+            let tempHex = "" + data.data[pointData + i];
+            hexColor += (tempHex.length === 2) ? tempHex :
+                (tempHex === 1) ? "0" + tempHex : "00";
+        }
+        return {rgb: "rgb(" + data.data[pointData] + ", " + data.data[pointData + 1] + ", " + data.data[pointData + 2] + ")",
+            hex: hexColor,
+            alpha: data.data[pointData + 3]};
+    }
+    function setToDataColor(cx, data, x, y) {
+        let pointData = (x + y * cx.canvas.width) * 4;
+        data.data[pointData + 3] = 255;
     }
 
     createPaint(document.body);
