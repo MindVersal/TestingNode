@@ -61,25 +61,25 @@ let http = require("http");
 //     console.log("Service answer with code: ", response.statusCode);
 // });
 // request.end();
-http.createServer(function (request, response) {
-    response.writeHead(200, {"Content-Type": "text/plain"});
-    request.on("data", function (chunk) {
-        response.write(chunk.toString().toUpperCase());
-    });
-    request.on("end", function () {
-        response.end();
-    });
-}).listen(8000);
-let request = http.request({
-    hostname: "localhost",
-    port: 8000,
-    method: "POST"
-}, function (response) {
-    response.on("data", function (chunk) {
-        process.stdout.write(chunk.toString());
-    });
-});
-request.end("Hello server.");
+// http.createServer(function (request, response) {
+//     response.writeHead(200, {"Content-Type": "text/plain"});
+//     request.on("data", function (chunk) {
+//         response.write(chunk.toString().toUpperCase());
+//     });
+//     request.on("end", function () {
+//         response.end();
+//     });
+// }).listen(8000);
+// let request = http.request({
+//     hostname: "localhost",
+//     port: 8000,
+//     method: "POST"
+// }, function (response) {
+//     response.on("data", function (chunk) {
+//         process.stdout.write(chunk.toString());
+//     });
+// });
+// request.end("Hello server.");
 
 
 
