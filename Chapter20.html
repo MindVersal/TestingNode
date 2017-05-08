@@ -284,7 +284,7 @@
     function fillIterat(cx, x, y, currentColor) {
         let stackTemp = [];
         let alphaTop = 200;
-        let dataImage = cx.getImageData(0, 0, cx.canvas.width - 1, cx.canvas.height - 1);
+        let dataImage = cx.getImageData(0, 0, cx.canvas.width, cx.canvas.height);
         stackTemp.push({pointX: x, pointY: y});
         while (stackTemp.length){
             let elemTemp = stackTemp.pop();
