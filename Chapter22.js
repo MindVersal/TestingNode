@@ -94,7 +94,7 @@ router.add("POST", /^\/talks\/([^\/]+)$/,
         }
     })
 });
-function sendTelks(talks, response) {
+function sendTalks(talks, response) {
     responseJSON(response, 200, {
         serverTime: Date.now(),
         talks: talks
@@ -108,15 +108,15 @@ router.add("GET", /^\/talks$/,
         for (let title in talks){
             list.push(talks[title]);
         }
-        sendTelks(list, response);
+        sendTalks(list, response);
     } else {
         let since = Number(query.changesSince);
         if (isNaN(since)){
             respond(response, 400, "Invalid Parameter.");
         } else {
-            let changed = getChengedTalks(since);
+            let changed = getChangedTalks(since);
             if (changed.length > 0){
-                sendTelks(changed, response);
+                sendTalks(changed, response);
             } else {
                 waitForChanges(since, response);
             }
@@ -131,7 +131,7 @@ function waitForChanges(since, response) {
         let found = waiting.indexOf(waiter);
         if (found > -1){
             waiting.splice(found, 1);
-            sendTelks([], response);
+            sendTalks([], response);
         }
     }, 90 * 1000);
 }
@@ -139,7 +139,7 @@ let changes = [];
 function registerChange(title) {
     changes.push({title: title, time: Date.now()});
     waiting.forEach(function (waiter) {
-        sendTelks(getChangedTalks(waiter.since), waiter.response);
+        sendTalks(getChangedTalks(waiter.since), waiter.response);
     });
     waiting = [];
 }
@@ -147,7 +147,7 @@ function getChangedTalks(since) {
     let found = [];
     function alreadySeen(title) {
         return found.some(function (f) {
-            return t.title === title;
+            return f.title === title;
         });
     }
     for (let i = changes.length - 1; i >= 0; i--){

@@ -93,7 +93,7 @@ function deleteTalk(title) {
 }
 function addComment(title, comment) {
     let comment = {author: nameField.value, message: comment};
-    request({pathname: talkURL(title) + "/commets",
+    request({pathname: talkURL(title) + "/comments",
             body: JSON.stringify(comment),
             method: "POST"},
                 reportError);
