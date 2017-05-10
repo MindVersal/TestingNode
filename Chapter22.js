@@ -136,7 +136,7 @@ function waitForChanges(since, response) {
     }, 90 * 1000);
 }
 let changes = [];
-function registerChenge(title) {
+function registerChange(title) {
     changes.push({title: title, time: Date.now()});
     waiting.forEach(function (waiter) {
         sendTelks(getChangedTalks(waiter.since), waiter.response);
