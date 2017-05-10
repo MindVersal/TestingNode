@@ -103,7 +103,7 @@ function sendTalks(talks, response) {
 router.add("GET", /^\/talks$/, 
             function (request, response) {
     let query = require("url").parse(request.url, true).query;
-    if (query.changesSince === null){
+    if (query.changesSince == null){
         let list = [];
         for (let title in talks){
             list.push(talks[title]);
