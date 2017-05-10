@@ -85,8 +85,19 @@ function drawTalk(talk) {
     });
     return node;
 }
-
-
+function talkURL(title) {
+    return "talks/" + encodeURIComponent(title);
+}
+function deleteTalk(title) {
+    request({pathname: talkURL(title), method: "DELETE"}, reportError);
+}
+function addComment(title, comment) {
+    let comment = {author: nameField.value, message: comment};
+    request({pathname: talkURL(title) + "/commets",
+            body: JSON.stringify(comment),
+            method: "POST"},
+                reportError);
+}
 
 
 
