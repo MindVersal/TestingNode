@@ -6,7 +6,7 @@ console.log();
 let http = require("http");
 let Router = require("./router");
 let ecstatic = require("ecstatic");
-let fileServer = ecstatic({root, "./public"});
+let fileServer = ecstatic({root: "./public"});
 let router = new Router();
  http.createServer(function (request, response) {
      if (!router.resolve(request, response)){
@@ -22,6 +22,24 @@ function respond(response, status, data, type) {
 function responseJSON(response, status, data) {
     respond(response, status, JSON.stringify(data), "application/json");
 }
+let talks = Object.create(null);
+router.add("GET", /^\/talks\/([^\/]+)$/,
+            function (request, response, title) {
+    if (title in talks){
+        responseJSON(response, 200, talks[title]);
+    } else {
+        respond(response, 404, "No talks '" + title + "' found.");
+    }
+});
+router.add("DELETE", /^\/talks\/([^\/]+)$/,
+            function (request, response, title) {
+    if (title in talks){
+        delete talks[title];
+        registerChange(title);
+    }
+    respond(response, 204, null);
+});
+
 
 console.log();
 console.log("THE END.");
