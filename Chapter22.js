@@ -96,7 +96,7 @@ router.add("POST", /^\/talks\/([^\/]+)$/,
 });
 function sendTelks(talks, response) {
     responseJSON(response, 200, {
-        serverTime: Data.now(),
+        serverTime: Date.now(),
         talks: talks
     });
 }
@@ -123,9 +123,47 @@ router.add("GET", /^\/talks$/,
         }
     }
 });
-
-
-
+let waiting = [];
+function waitForChanges(since, response) {
+    let waiter = {since: since, response: response};
+    waiting.push(waiter);
+    setTimeout(function () {
+        let found = waiting.indexOf(waiter);
+        if (found > -1){
+            waiting.splice(found, 1);
+            sendTelks([], response);
+        }
+    }, 90 * 1000);
+}
+let changes = [];
+function registerChenge(title) {
+    changes.push({title: title, time: Date.now()});
+    waiting.forEach(function (waiter) {
+        sendTelks(getChangedTalks(waiter.since), waiter.response);
+    });
+    waiting = [];
+}
+function getChangedTalks(since) {
+    let found = [];
+    function alreadySeen(title) {
+        return found.some(function (f) {
+            return t.title === title;
+        });
+    }
+    for (let i = changes.length - 1; i >= 0; i--){
+        let change = changes[i];
+        if (change.time <= since){
+            break;
+        } else if (alreadySeen(change.title)){
+            continue;
+        } else if (change.title in talks){
+            found.push(talks[change.title]);
+        } else {
+            found.push({title: change.title, deleted: true});
+        }
+    }
+    return found;
+}
 
 
 
