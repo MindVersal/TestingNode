@@ -94,8 +94,35 @@ router.add("POST", /^\/talks\/([^\/]+)$/,
         }
     })
 });
-
-
+function sendTelks(talks, response) {
+    responseJSON(response, 200, {
+        serverTime: Data.now(),
+        talks: talks
+    });
+}
+router.add("GET", /^\/talks$/, 
+            function (request, response) {
+    let query = require("url").parse(request.url, true).query;
+    if (query.changesSince === null){
+        let list = [];
+        for (let title in talks){
+            list.push(talks[title]);
+        }
+        sendTelks(list, response);
+    } else {
+        let since = Number(query.changesSince);
+        if (isNaN(since)){
+            respond(response, 400, "Invalid Parameter.");
+        } else {
+            let changed = getChengedTalks(since);
+            if (changed.length > 0){
+                sendTelks(changed, response);
+            } else {
+                waitForChanges(since, response);
+            }
+        }
+    }
+});
 
 
 
