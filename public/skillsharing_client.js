@@ -98,9 +98,22 @@ function addComment(title, comment) {
             method: "POST"},
                 reportError);
 }
-
-
-
+let nameField = document.querySelector("#name");
+nameField.value = localStorage.getItem("name") || "";
+nameField.addEventListener("change", function () {
+    localStorage.setItem("name", nameField.value);
+});
+let talkForm = document.querySelector("#newtalk");
+talkForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    request({pathname: talkURL(talkForm.elements.title.value),
+            method: "PUT",
+            body: JSON.stringify({
+                presenter: nameField.value,
+                summary: talkForm.elements.summary.value
+            })}, reportError);
+    talkForm.reset();
+});
 
 
 
