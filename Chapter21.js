@@ -128,7 +128,9 @@ methods.GET = function (path) {
             return {code: 404, body: "File not found."};
         } else if (stats.isDirectory()){
             return fsp.readdir(path).then(function (files) {
-                return {code: 200, body: files.join("\n")};
+                return {code: 200, body: files.map(function (file) {
+                    return "<a href = \"" + path + file + "\">" + file + "</a>";
+                }).join("</br>")};
             });
         } else {
             return {code: 200,
