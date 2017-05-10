@@ -19,14 +19,14 @@ function respond(response, status, data, type) {
     });
     response.end(data);
 }
-function responseJSON(response, status, data) {
+function respondJSON(response, status, data) {
     respond(response, status, JSON.stringify(data), "application/json");
 }
 let talks = Object.create(null);
 router.add("GET", /^\/talks\/([^\/]+)$/,
             function (request, response, title) {
     if (title in talks){
-        responseJSON(response, 200, talks[title]);
+        respondJSON(response, 200, talks[title]);
     } else {
         respond(response, 404, "No talks '" + title + "' found.");
     }
@@ -67,16 +67,16 @@ router.add("PUT", /^\/talks\/([^\/]+)$/,
                     typeof talk.summary !== "string"){
             respond(response, 400, "Bad talk data.");
         } else {
-            talk[title] = {title: title,
+            talks[title] = {title: title,
                             presenter: talk.presenter,
                             summary: talk.summary,
                             comments: []};
             registerChange(title);
             respond(response, 204, null);
         }
-    })
+    });
 });
-router.add("POST", /^\/talks\/([^\/]+)$/,
+router.add("POST", /^\/talks\/([^\/]+)\/comments$/,
             function (request, response, title) {
     readStreamAsJSON(request, function (error, comment) {
         if (error){
@@ -92,10 +92,10 @@ router.add("POST", /^\/talks\/([^\/]+)$/,
         } else {
             respond(response, 404, "No talks '" + title + "' found.")
         }
-    })
+    });
 });
 function sendTalks(talks, response) {
-    responseJSON(response, 200, {
+    respondJSON(response, 200, {
         serverTime: Date.now(),
         talks: talks
     });
